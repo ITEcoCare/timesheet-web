@@ -218,6 +218,21 @@ export const useStore = create((set) => ({
             console.log(error);
         }
     },
+    getMyApproval: async (token, inputs) => {
+        try {
+            const result = await axios.post(`${url2}timesheet/my-approval`, 
+            {
+                date: inputs 
+            },
+            {
+                headers: {Authorization: `bearer ${token}`},
+            }
+            );
+            return Promise.resolve(result.data);
+        } catch (error) {
+            console.log(error);
+        }
+    },
     createTimesheet: async (token, val) => {
         let ambilAcc = JSON.parse(localStorage.getItem("account"))   
         console.log("masuk cr ts >> val", val)
@@ -254,7 +269,8 @@ export const useStore = create((set) => ({
             console.log(error)
         }
     },
-    submitTimesheet: async(token, record) => {
+    submitTimesheet: async(token) => {
+        console.log(token)
         try {
             const rc = await axios.post(`${url2}timesheet/submit`,
                 { }, 
@@ -262,9 +278,115 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            console.log("hasil sub ts", rc)
             toast(`Timesheet submitted! 👍`, {
+                icon: "🚀",
                 type: "warning",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                  width: "100%",
+                  'borderRadius':'15px',
+                  'marginBottom': '40px',
+                },
+            })
+            set({ setTsStatus: true })
+
+            return rc
+
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    submitSlcTimesheet: async(token, val) => {
+        let temp = []
+        for (let j = 0; j < val.length; j++) temp.push(val[j].timesheet_id)
+
+        try {
+            const rc = await axios.post(`${url2}timesheet/save`,
+                {
+                    action: "submit",
+                    timesheet_id: temp
+                }, 
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            toast(`Timesheet submitted! 👍`, {
+                icon: "🚀",
+                type: "warning",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                  width: "100%",
+                  'borderRadius':'15px',
+                  'marginBottom': '40px',
+                },
+            })
+            set({ setTsStatus: true })
+            return rc
+        } catch (error) {
+            console.log(error)
+        }
+    }, 
+    updateTimesheet: async (token, val)=> {
+        try {
+            const rc = await axios.post(`${url2}timesheet/update`,
+                {
+                    timesheet_id: val.timesheet_id,
+                    project_id: val.project_id,
+                    tag_id: val.tag_id,
+                    duration: val.duration,
+                    work_date: val.work_date,
+                    description: val.description,
+                },
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            
+            toast(`Timesheet berhasil ter-update.`, {
+                type: "success",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                    width: "100%",
+                    'borderRadius':'15px',
+                    'marginBottom': '40px',
+                },
+            })
+            return rc.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    createAWeek: (values) => {
+        console.log("masuk create a week");
+    },
+    approveTimesheet: async (token, val) => {
+        // console.log("masuk approved",  val[0].employee_id,  val[0].timesheet_work_date)
+        try {
+            const rc = await axios.post(`${url2}timesheet/approve`,
+                {
+                    employee_id: val[0].employee_id,
+                    work_date: val[0].timesheet_work_date
+                }, 
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            console.log("hasil apv ts", rc)
+            set({ setTsStatus: true })
+            toast(`${rc.data.message} 👍`, {
+                type: "success",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
                 closeButton: false,
                 position: 'bottom-center',
@@ -279,25 +401,72 @@ export const useStore = create((set) => ({
             return rc
 
         } catch (error) {
-            console.log(error)
+            if (val.timesheet_status == 1) {
+                toast(`Anda tidak memiliki wewenang terhadap timesheet ini!`, {
+                    type: "error",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+            } else if (val.timesheet_status == 0){
+                toast(`timesheet ini belum dapat di approve...`, {
+                    type: "info",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+
+            } else {
+                toast(`timesheet ini sudah pernah di approve.`, {
+                    type: "warning",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+
+            }
         }
-    }, 
-    createAWeek: (values) => {
-        console.log("masuk create a week");
     },
-    approveTimesheet: async (token, val) => {
-        console.log("masuk approved", val.employee_id, val.timesheet_work_date)
+    approveSlcTimesheet: async (token, val) => {
+        let temp = []
+        for (let j = 0; j < val.length; j++) temp.push(val[j].timesheet_id)
+        console.log("masuk Slc approved",  temp)
+        
         try {
-            const rc = await axios.post(`${url2}timesheet/approve`,
+            const rc = await axios.post(`${url2}timesheet/save`,
                 {
-                    employee_id: val.employee_id,
-                    work_date: val.timesheet_work_date
+                    action: "approve",
+                    timesheet_id: temp
                 }, 
                 {
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            console.log("hasil apv ts", rc)
+            set({ setTsStatus: true })
             toast(`${rc.data.message} 👍`, {
                 type: "success",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
@@ -365,18 +534,18 @@ export const useStore = create((set) => ({
         }
     },
     rejectTimesheet: async (token, val) => {
-        console.log("masuk rejected", val.employee_id, val.timesheet_work_date)
+        console.log("masuk rejected", val[0].employee_id)
         try {
             const rc = await axios.post(`${url2}timesheet/reject`,
                 {
-                    employee_id: val.employee_id,
-                    work_date: val.timesheet_work_date
+                    employee_id:  val[0].employee_id,
+                    work_date:  val[0].timesheet_work_date
                 }, 
                 {
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            console.log("hasil apv ts", rc)
+            set({ setTsStatus: true })
             toast(`${rc.data.message}... 👍`, {
                 type: "warning",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
@@ -457,6 +626,101 @@ export const useStore = create((set) => ({
             }
         }
     },
+    rejectSlcTimesheet: async (token, val) => {
+        let temp = []
+        for (let j = 0; j < val.length; j++) temp.push(val[j].timesheet_id)
+        console.log("masuk Slc reject",  temp)
+        // try {
+        //     const rc = await axios.post(`${url2}timesheet/save`,
+        //     {
+        //         action: "reject",
+        //         timesheet_id: temp
+        //     },  
+        //         {
+        //             headers: { Authorization: `bearer ${token}`},
+        //         }
+        //     )
+        //     set({ setTsStatus: true })
+        //     toast(`${rc.data.message}... 👍`, {
+        //         type: "warning",
+        //         theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+        //         closeButton: false,
+        //         position: 'bottom-center',
+        //         hideProgressBar: false,
+        //         className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+        //         style: {
+        //           width: "100%",
+        //           'borderRadius':'15px',
+        //           'marginBottom': '40px',
+        //         },
+        //     })
+        //     return rc
+
+        // } catch (error) {
+        //     if (val.timesheet_status == 1) {
+        //         toast(`Anda tidak memiliki wewenang terhadap timesheet ini!`, {
+        //             type: "error",
+        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+        //             closeButton: false,
+        //             position: 'bottom-center',
+        //             hideProgressBar: false,
+        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+        //             style: {
+        //               width: "100%",
+        //               'borderRadius':'15px',
+        //               'marginBottom': '40px',
+        //             },
+        //         })
+        //         console.log(error)
+        //     } else if (val.timesheet_status == 0){
+        //         toast(`timesheet ini belum dapat di reject...`, {
+        //             type: "info",
+        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+        //             closeButton: false,
+        //             position: 'bottom-center',
+        //             hideProgressBar: false,
+        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+        //             style: {
+        //               width: "100%",
+        //               'borderRadius':'15px',
+        //               'marginBottom': '40px',
+        //             },
+        //         })
+        //         console.log(error)
+
+        //     } else if (val.timesheet_status == 3){
+        //         toast(`timesheet ini sudah pernah di reject.`, {
+        //             type: "warning",
+        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+        //             closeButton: false,
+        //             position: 'bottom-center',
+        //             hideProgressBar: false,
+        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+        //             style: {
+        //               width: "100%",
+        //               'borderRadius':'15px',
+        //               'marginBottom': '40px',
+        //             },
+        //         })
+        //         console.log(error)
+        //     } else {
+        //         toast(`timesheet ini sudah di approve.`, {
+        //             type: "warning",
+        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+        //             closeButton: false,
+        //             position: 'bottom-center',
+        //             hideProgressBar: false,
+        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+        //             style: {
+        //               width: "100%",
+        //               'borderRadius':'15px',
+        //               'marginBottom': '40px',
+        //             },
+        //         })
+        //         console.log(error)
+        //     }
+        // }
+    },
     
     
     getProject: async (token)=> {
@@ -467,6 +731,19 @@ export const useStore = create((set) => ({
             })
             // console.log("isi get project", resPro)
             return Promise.resolve(resPro)
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    getProjectAllUser: async (token)=> {
+        try {
+            const rez = await axios.get(`${url2}project/read`, { 
+                headers: { Authorization: `bearer ${token}`},
+            })
+            console.log("rez", rez)
+            return rez
+            // return Promise.resolve(rez)
+
         } catch (error) {
             console.log(error);
         }
@@ -538,21 +815,60 @@ export const useStore = create((set) => ({
             console.log(error);
         }
     },
+
+    updateProject: async (token, val)=> {
+        console.log("dari ztd >> ", val)
+       
+        try {
+            const rc = await axios.post(`${url2}project/update`,
+                {
+                    company_id: 2, //hardcode
+                    id: val.id,
+                    title: val.title,
+                    description: val.description,
+                    start_date: val.start_date,
+                    end_date: val.end_date,
+                },
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            
+            toast(`Project selesai ter-update.`, {
+                type: "success",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                    width: "100%",
+                    'borderRadius':'15px',
+                    'marginBottom': '40px',
+                },
+            })
+            return rc.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
     delProject: async (token, val) => {
-        set({ flagDelete: false })
+        // set({ flagDelete: false })
         try {
             let ambilAcc = JSON.parse(localStorage.getItem("account"))
             const res = await axios.post(`${url2}project/delete`,
                 {
-                    company_id: ambilAcc.employee_company_id ,
-                    id: val.project_id, 
+                    company_id: Number(ambilAcc.employee_company_id) ,
+                    id: Number(val.project_id), 
                 }, 
                 { 
                     headers: { Authorization: `bearer ${token}`},
                 }  
             );
-            set({ flagDelete: true })
-            return Promise.resolve(res)
+            // set({ flagDelete: true })
+            console.log("res", res)
+            // return Promise.resolve(res)
             
         } catch (error) {
             console.log(error)
@@ -607,10 +923,19 @@ export const useStore = create((set) => ({
     setDaySelected: (day) => set({ daySelected: day }),
 
     dayEvents: [{}, {}],
+
     showEventModal: false,
     setShowEventModal: (val) => set({ showEventModal: val }),
+    updTSModal: false,
+    setUpdTSModal: (val) => { set({ updTSModal: val }) },
+    tsStatus: false,
+    setTsStatus: (val) => set({ tsStatus: val }),
+    
+
     showProjectModal: false,
     setShowProjectModal: (val) => { set({ showProjectModal: val }) },
+    updModal: false,
+    setUpdModal: (val) => { set({ updModal: val }) },
 
     savedEvents: null,
     dispatchCalEvent: null,

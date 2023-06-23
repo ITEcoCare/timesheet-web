@@ -29,7 +29,8 @@ import {
 import { useStore } from "../../store/zustand";
 import TimesheetEventModal from "./TimesheetEventModal";
 import TimesheetUpdateModal from "./TimesheetUpdateModal";
-import GoSubmit from "./GoSubmit";
+import GoReject from "./GoReject";
+import GoApprove from "./GoApprove"
 import Tempo from "../Tempo";
 
 import {
@@ -147,6 +148,7 @@ const TableTimesheet = ({ columns, data }) => {
     const showProjectModal = useStore((state) => state.showProjectModal);
     const setShowProjectModal = useStore((state) => state.setShowProjectModal);
     const getTimesheet = useStore((state) => state.getTimesheet);
+    const getMyApproval = useStore((state) => state.getMyApproval);
     const submitTimesheet = useStore((state) => state.submitTimesheet);
     const approveTimesheet = useStore((state) => state.approveTimesheet);
     const rejectTimesheet = useStore((state) => state.rejectTimesheet);
@@ -263,7 +265,7 @@ const TableTimesheet = ({ columns, data }) => {
     const userData = JSON.parse(localStorage.getItem("account"));
 
     const runTimesheet = async (token, inputs) => {
-        let res = await getTimesheet(token, isiDate);
+        let res = await getMyApproval(token, isiDate);
         if(res.success){
             // console.log("res.result", isiDate, res.result)
             const data = [];
@@ -418,6 +420,8 @@ const TableTimesheet = ({ columns, data }) => {
             // fixed: "left",
             dataIndex: "timesheet_status",
             key: "timesheet_status",
+            defaultSortOrder: 'ascend',
+            sorter: (a, b) => (a.timesheet_status > b.timesheet_status ? -1 : 1),
             // width: 120,
             render: (text, record) => {
                 // 0:drafted, 1:submitted, 2:approved, 3:rejected,
@@ -1012,11 +1016,11 @@ const TableTimesheet = ({ columns, data }) => {
                     </div>
                     <div className="col-span-1 flex justify-end ">
                         
-                        <GoSubmit token={accessToken} record={recordTs} />
+                        {/* <GoSubmit token={accessToken}/> */}
                       
-                        {/* { userData.employee_lead && <GoApprove token={accessToken} record={recordTs}/> }
-                        { userData.employee_lead && <GoReject token={accessToken} record={recordTs}/> } */}
-
+                        { userData.employee_lead && <GoApprove token={accessToken} record={recordTs}/> }
+                        { userData.employee_lead && <GoReject token={accessToken} record={recordTs}/> }
+                        
                         {/* <Dropdown
                             className="ml-4 cursor-pointer bg-red-500 hover:bg-red-400 text-white font-bold border-b-4 border-red-700 hover:border-red-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
                             menu={{ itemsRej }}

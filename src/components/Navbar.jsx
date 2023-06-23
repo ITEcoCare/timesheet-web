@@ -15,6 +15,7 @@ const Navbar = () => {
 
     const accessToken = localStorage.getItem("accessToken");
     const myUser = JSON.parse(localStorage.getItem("account"));
+    const userData = JSON.parse(localStorage.getItem("account"));
 
     // console.log(userInfo);
 
@@ -131,58 +132,85 @@ const Navbar = () => {
         },
     ];
 
+    const navParent = "m-2"
+    const navChild = "m-2 xl:w-1/6 md:w-2/6 sm:w-3/6 bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
+    const navChildSignin = "m-2 xl:w-1/6 md:w-2/6 sm:w-3/6 text-white font-bold py-3 px-4 border-b-4 bg-green-500 hover:bg-green-400 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
+
     return (
-        <div className="flex flex-col fixed z-20 md:flex-wrap items-center justify-center">
-            <div className="flex flex-col mt-2 md:flex-row items-center justify-center ">
-                <Link
-                    className="mx-2 m-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                    to={"/"}
-                >
-                    Home
-                </Link>
-                {!initialState._isLoggedIn ? (
+        <div className="flex flex-col mt-2 fixed z-20 md:flex-row items-center justify-center">
+            <div className="flex flex-wrap mt-4 md:flex-row items-center justify-center ">
+                <div>
                     <Link
-                        className="mx-2 m-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                        to={"/signin"}
+                        className={navChild}
+                        to={"/"}
                     >
-                        Sign In
+                        Home
                     </Link>
+                </div>
+                {!initialState._isLoggedIn ? (
+                    <div>
+                        <Link
+                            className={navChildSignin}
+                            to={"/signin"}
+                        >
+                            Sign In
+                        </Link>
+                    </div>
                 ) : (
                     <>
-                        <Link
-                            className="mx-2 m-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                            to={"/project"}
-                        >
-                            Project
-                        </Link>
-                        <Link
-                            className="mx-2 m-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                            to={"/timesheet"}
-                        >
-                            Timesheet
-                        </Link>
-                        <Link
-                            className="mx-2 m-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                            to={"/calendar"}
-                        >
-                            Calendar
-                        </Link>
-                        <Link
-                            className="mx-2 m-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                            to={"/employee"}
-                        >
-                            Employee
-                        </Link>
-                        <Link
-                            className="mx-2 m-2 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                            to={"/tempo"}
-                        >
-                            Tempo
-                        </Link>
+                        <div>
+                            <Link
+                                className={navChild}
+                                to={"/project"}
+                            >
+                                Project
+                            </Link>
+                        </div>
+                        <div>
+                            <Link
+                                className={navChild}
+                                to={"/timesheet"}
+                            >
+                                Timesheet
+                            </Link>
+                        </div>
+                        <div>
+                            { userData.employee_lead && <Link
+                                className={navChild}
+                                to={"/my-approval"}
+                            >
+                                My Approval
+                            </Link> 
+                            }
+                        </div>
+                        {/* <div>
+                            <Link
+                                className={navChild}
+                                to={"/calendar"}
+                            >
+                                Calendar
+                            </Link>
+                        </div> */}
+                        <div>
+                            <Link
+                                className={navChild}
+                                to={"/employee"}
+                            >
+                                Employee
+                            </Link>
+                        </div>
+                        {/* <div>
+                            <Link
+                                className={navChild}
+                                to={"/tempo"}
+                            >
+                                Tempo
+                            </Link>
+                        </div> */}
                     </>
                 )}
             </div>
-            <div className="fixed rounded-lg p-2 z-20 flex items-center space-x-4 right-10 mt-2">
+            <div className="fixed rounded-lg p-2 z-20 flex items-center space-x-4 right-10 mt-4">
                 <button
                     type="button"
                     onClick={handleThemeSwitch}

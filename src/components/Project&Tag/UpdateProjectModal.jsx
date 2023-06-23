@@ -17,65 +17,55 @@ import { Form, Formik, useFormik } from "formik";
 
 const labelsClasses = ["green", "blue", "red", "yellow", "purple"];
 
-const TimesheetEventModal = () => {
+const UpdateProjectModal = ({resVal}) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [selectedLabel, setSelectedLabel] = useState(labelsClasses[0]);
 
   const accessToken = localStorage.getItem("accessToken");
 
-
   //zustand
-  // const showEventModal = useStore((state) => state.showEventModal);
-  // const setShowEventModal = useStore((state) => state.setShowEventModal);
   const showProjectModal = useStore((state) => state.showProjectModal);
   const setShowProjectModal = useStore((state) => state.setShowProjectModal);
   const createProject = useStore((state) => state.createProject);
   const assignProject = useStore((state) => state.assignProject);
+  const updateProject = useStore((state) => state.updateProject);
   const daySelected = useStore((state) => state.daySelected);
+  const updModal = useStore((state) => state.updModal);
+  const setUpdModal = useStore((state) => state.setUpdModal);
 
   const formSpanClass = "inline-flex items-center px-3 text-sm rounded-l-lg bg-green-300 dark:bg-stone-800"
+  const labelClass = "flex items-baseline p-2";
 
-  const createAssignProj = async (values)=> {
-    let res = await createProject(accessToken, values);
-    
-    if (res.success){
-      console.log("val createAssignProj >>", values)
-      console.log("res createProject >>", res)
-      let path = res.result
-      let isiVal= {
-              company_id: path.fk_company_id,
-              createdby_id: path.fk_createdby_id,
-              project_id: path.project_id
-          }
-      assignProject(accessToken, res) 
+  const updateSelectedProj = (values) => {
+    let updVal = {
+        id: resVal.project_id,
+        title: values.title,
+        description: values.description,
+        start_date: values.start_date,
+        end_date: values.end_date,
     }
+    updateProject(accessToken, updVal);
   }
 
   const formik = useFormik({
       initialValues: {
-          title: "Diskusi - Enterprise Resource Planning Epicor",
-          description: "Memahami lebih dalam aftersales ERP Epicor",
-          start_date: "2023-05-25", // hard code
-          end_date: "2024-05-25", // hard code
-          company_id: 2 // hard code
-          // project_name: "Dashboard pestCare",
-          // tasktitle: "Patching DB X",
+        title: resVal.project_title,
+        description: resVal.project_description,
+        start_date: resVal.start_date,
+        end_date: resVal.end_date,
       },
     onSubmit: (values, actions) => {
-        // alert(JSON.stringify(values, null, 2));
-        setShowProjectModal(false);
-        createAssignProj(values)
+        alert(JSON.stringify(values, null, 2));
+        setUpdModal(false);
+        updateSelectedProj(values)
     },
   });
 
-  const labelClass = "flex items-baseline p-2";
-
   useEffect(() => {
-    console.log("createProject dri dpean", createProject)
-  
-  }, [showProjectModal])
-  
+  }, [
+    showProjectModal
+  ])
 
   return (
     <>
@@ -85,14 +75,25 @@ const TimesheetEventModal = () => {
               <div className="w-full flex justify-end px-2">
                   <button
                       className="flex justify-end align-middle text-white font-bold w-10 rounded-xl"
-                      onClick={() => {setShowProjectModal(false)}}
+                      onClick={() => {setUpdModal(false)}}
                   >
                   <span className=" cursor-pointer text-gray-400"><FaTimes /></span>
                   </button>
               </div>
           </header>
-          <div className=" p-3">
-            <span className="font-bold text-xl flex ml-4 text-green-500">Create A Project</span>
+          <div className="m-2 p-3">
+            <span className="font-bold text-xl flex ml-4 text-green-500">Edit Project</span>
+            {/* <div className={labelClass}>
+              <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">Company</label>
+              <input
+                  type="text"
+                  id="company_id"
+                  placeholder="company_id"
+                  onChange={formik.handleChange}
+                  value={formik.values.company_id}
+                  className={"w-full fill-white dark:bg-stone-800 hover:bg-white-400 font-bold py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "}
+              />
+            </div> */}
             <div className={labelClass}>
               <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">Title</label>
           
@@ -194,4 +195,4 @@ const TimesheetEventModal = () => {
   );
 };
 
-export default TimesheetEventModal;
+export default UpdateProjectModal;

@@ -13,6 +13,7 @@ import Intro from "./components/Intro";
 import Profile from "./components/Profile";
 import Project from "./components/Project&Tag/Project";
 import Timesheet from "./components/Timesheet/Timesheet";
+import MyApproval from "./components/MyApproval/Timesheet";
 import Calendar from "./components/Calendar/Calendar";
 import Navbar from "./components/Navbar";
 import Joget from "./components/Joget";
@@ -92,6 +93,14 @@ function App() {
           ),
         },
         {
+          path: "/my-approval",
+          element: (
+            <RequiredAuth isLoggedIn={false}>
+              <MyApproval />
+            </RequiredAuth>
+          ),
+        },
+        {
           path: "/employee",
           element: (
             <RequiredAuth isLoggedIn={false}>
@@ -135,18 +144,6 @@ function App() {
       <div className="w-full flex flex-col bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-300 min-h-screen font-inter">
         <div className="w-full mb-auto flex flex-col">
           {routes}
-          {/* <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/navbar" element={<Navbar />}/>
-            <Route path='/intro' element={<Intro />}/>
-            <Route path='/joget' element={<Joget />}/>
-            <Route path='/profile' element={<Profile />}/>
-            <Route path='/timesheet' element={<Timesheet />}/>
-            <Route path='/calendar' element={<Calendar />}/>
-            <Route path='/footer' element={<Footer />}/>
-          </Route>
-        </Routes> */}
         </div>
         <Footer />
       </div>

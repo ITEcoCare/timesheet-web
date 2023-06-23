@@ -64,10 +64,7 @@ const TimesheetEventModal = () => {
 
   const labelClass = "flex items-baseline p-2";
 
-  // useEffect(() => {
-  //   console.log("createProject dri dpean", createProject)
-  
-  // }, [])
+
   
 
   return (

@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import Home from "./components/Home";
 import Intro from "./components/Intro";
-import Profile from "./components/Profile";
+import ProfileModal from "./components/User/ProfileModal";
 import Project from "./components/Project&Tag/Project";
 import Timesheet from "./components/Timesheet/Timesheet";
 import MyApproval from "./components/MyApproval/Timesheet";

@@ -1,34 +1,27 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useStore } from "../../store/zustand";
 import { Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
-function GoReject({ token, record }) {
+function GoApprove({ token, record, tsApvStatus, setTsApvStatus, runTimesheet }) {
 
     const approveTimesheet = useStore((state) => state.approveTimesheet);
     const approveSlcTimesheet = useStore((state) => state.approveSlcTimesheet);
-    const tsStatus = useStore((state) => state.tsStatus);
-    const setTsStatus = useStore((state) => state.setTsStatus);
+    // const tsApvStatus = useStore((state) => state.tsApvStatus);
+    // const setTsApvStatus = useStore((state) => state.setTsApvStatus);
+
+    // const [tsApvStatus, setTsApvStatus] = useState(false)
 
     const runSlcApprove = () => {
         // console.log("masuk goApprove", token, record)
         approveSlcTimesheet(token, record);
-        setTsStatus(true);
-    }
-
-    const runApproveAll = () => {
-        approveSlcTimesheet(token, record);
-        setTsStatus(true);
+        setTsApvStatus(true);
     }
     
     const items = [
         {
             label: (
-                <div 
-                // onClick={() => {
-                //     runApproveAll(token)
-                //     setTsStatus(true)
-                // }}
+                <div
                 className="px-4 py-3 text-sm font-medium text-gray-400 dark:text-white  dark:bg-stone-700">
                     <div>Approve All</div>
                 </div>
@@ -41,10 +34,9 @@ function GoReject({ token, record }) {
                 <div 
                 onClick={() => {
                     runSlcApprove(token)
-                    setTsStatus(true)
                 }}
                 className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-                    <div>Selected Only</div>
+                    <div>Selected Only.</div>
                 </div>
             ),
             key: "2",
@@ -54,7 +46,7 @@ function GoReject({ token, record }) {
     useEffect(() => {
   
     }, [
-        tsStatus
+        tsApvStatus = false
     ]);
 
     return (
@@ -62,13 +54,14 @@ function GoReject({ token, record }) {
             className="ml-4 cursor-pointer bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
             menu={{ items }}
             trigger={["click"]}
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => {
+                e.preventDefault()
+                runTimesheet(token)
+            }}
         >
             <Space >
                 <label
                     className="ml-5 cursor-pointer focus:ring-4 focus:outline-nonetext-center inline-flex items-center py-2"
-                    onClick={() => {
-                    }}
                     id="dropdownDefaultButton" 
                     data-dropdown-toggle="dropdown"
                 >
@@ -81,4 +74,4 @@ function GoReject({ token, record }) {
     );
 }
 
-export default GoReject;
+export default GoApprove;

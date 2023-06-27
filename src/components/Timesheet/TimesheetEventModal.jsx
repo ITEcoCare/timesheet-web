@@ -78,28 +78,12 @@ const TimesheetEventModal = () => {
         };
     }
     
-   
-    const createTsByGetProj = async (token, values)=> {
-        // console.log("inputted ts >> ", values)
-        // let res = await getProjectByUser(token);
-        createTimesheet(token, values)
-        setShowEventModal(false);
-        // if (res.success){
-        //     let k = res.result
-            // for (let i = 0; i < k.length; i++) {
-            //     if (k[i].title == values.project_name) {
-            //         createTimesheet(token, k[i].project_id)
-            //         setShowEventModal(false);
-            //         break;
-            //     } 
-            // }
-        // }
-    }
 
     
  
     const formik = useFormik({
         initialValues: {
+            work_date: `${dayjs().format('YYYY-MM-DD')}`,
             project_id: "",
             tag_id: "",
         },
@@ -136,7 +120,7 @@ const TimesheetEventModal = () => {
 
     return (
         <>
-            <div className="flex flex-col fixed min-h-screen w-full z-20 bg-stone-800 bg-opacity-90 left-0 top-0 justify-center items-center">
+            <div className=" mt-2 md:flex-row  flex flex-col fixed min-h-screen w-full z-20 bg-stone-800 bg-opacity-90 left-0 top-0 justify-center items-center">
                 <div className=" bg-gray-100 w-[100vh] lg:w-[80vh] md:w-[60vh] sm:w-[40vh] h-full rounded-xl">
                     <header className="flex flex-wrap lg:flex-wrap-reverse md:flex-wrap sm:flex-wrap mb-4 z-30 py-2 px-4 text-center  bg-gray-200 rounded-t-xl justify-between items-center">
                         <div className="w-full flex justify-end px-2">
@@ -155,13 +139,13 @@ const TimesheetEventModal = () => {
 
                             <label className={labelClass}>
                                 <label className="pb-[14px] bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">
-                                    Date
+                                    Datee
                                 </label>
                                 <input
                                     type="date"
                                     id="work_date"
                                     placeholder="date..."
-                                    defaultValue={now}
+                                    // defaultValue={now}
                                     onChange={formik.handleChange}
                                     value={formik.values.work_date}
                                     className={
@@ -229,7 +213,7 @@ const TimesheetEventModal = () => {
                                     Duration
                                 </label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     id="duration"
                                     name="duration"
                                     placeholder="hour(s)"

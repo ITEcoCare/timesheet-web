@@ -4,14 +4,19 @@ import { useStore } from "../store/zustand";
 import ava from "../assets/cak_lontong02.jpeg";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
+import ProfileModal from "./User/ProfileModal";
 
 const Navbar = () => {
     // state
     const [theme, setTheme] = useState(localStorage.getItem("theme"));
+    
+    //zustand 
     const setTema = useStore((state) => state.setTema);
     const initialState = useStore((state) => state.initialState);
     const userInfo = useStore((state) => state.userInfo);
     const logout = useStore((state) => state.logout);
+    const showProfileModal = useStore((state) => state.showProfileModal);
+    const setShowProfileModal = useStore((state) => state.setShowProfileModal);
 
     const accessToken = localStorage.getItem("accessToken");
     const myUser = JSON.parse(localStorage.getItem("account"));
@@ -73,7 +78,10 @@ const Navbar = () => {
     const items = [
         {
             label: (
-                <div className="px-4 py-3 text-sm text-gray-900 dark:text-white  dark:bg-stone-700">
+                <div 
+                    className="px-4 py-3 text-sm text-gray-900 dark:text-white  dark:bg-stone-700"
+                    onClick={()=> { setShowProfileModal(true) }}
+                >
                     <div>Bonnie Green</div>
                     <div className="font-medium truncate">
                         name@flowbite.com

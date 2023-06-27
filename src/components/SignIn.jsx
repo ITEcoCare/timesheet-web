@@ -165,7 +165,7 @@ const SignIn = () => {
                     />
                   </div>
 
-                  <div className="mt-7 flex">
+                  {/* <div className="mt-7 flex">
                     <label className="inline-flex items-center w-full cursor-pointer">
                       <input
                         id="remember_me"
@@ -186,7 +186,7 @@ const SignIn = () => {
                         Forgot Password?
                       </a>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="mt-7">
                     <button
@@ -197,7 +197,7 @@ const SignIn = () => {
                     </button>
                   </div>
 
-                  <div className="flex mt-7 items-center text-center">
+                  {/* <div className="flex mt-7 items-center text-center">
                     <hr className="border-gray-300 border-1 w-full rounded-md" />
                     <label className="block font-medium text-sm text-gray-600 w-full">
                       Or
@@ -212,7 +212,7 @@ const SignIn = () => {
                     <button className="mx-2 m-2 py-2 px-4 rounded-xl text-white font-bold bg-green-500 hover:bg-green-400 border-b-4 border-green-700 hover:border-green-500 ">
                       Google
                     </button>
-                  </div>
+                  </div> */}
 
                   <div className="mt-7">
                     <div className="flex justify-center items-center">

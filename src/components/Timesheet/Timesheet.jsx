@@ -64,7 +64,7 @@ const Timesheet = () => {
       {/* <Tempo /> */}
       {/* <Project columns={columns} data={data} /> */}
       <TimesheetTable columns={columns} data={data} />
-      {showEventModal && <TimesheetEventModal />}
+      {/* {showEventModal && <TimesheetEventModal />} */}
       {/* {showProjectModal && <ProjectEventModal />} */}
       
     </div>

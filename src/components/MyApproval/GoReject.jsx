@@ -3,27 +3,30 @@ import { useStore } from "../../store/zustand";
 import { Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
-function GoReject({ token, record }) {
+function GoReject({ token, record, runTimesheet }) {
 
     const rejectTimesheet = useStore((state) => state.rejectTimesheet);
     const rejectSlcTimesheet = useStore((state) => state.rejectSlcTimesheet);
     const tsStatus = useStore((state) => state.tsStatus);
     const setTsStatus = useStore((state) => state.setTsStatus);
+    const tsRejStatus = useStore((state) => state.tsRejStatus);
+    const setTsRejStatus = useStore((state) => state.setTsRejStatus);
+
 
     const runRejected = () => {
         console.log("masuk goreject", token, record)
         rejectTimesheet(token, record);
-        setTsStatus(true);
+        setTsRejStatus(true);
         // if (alert('are you sure you want to reject all timesheet?')) {
         //     // rejectTimesheet(accessToken, record);
-        //     setTsStatus(true);
+        //     setTsRejStatus(true);
         // }
     }
 
     const runSlcRejected = () => {
         console.log("masuk goreject", token, record)
+        setTsRejStatus(true);
         rejectSlcTimesheet(token, record);
-        setTsStatus(true);
     }
     
     const items = [
@@ -32,7 +35,7 @@ function GoReject({ token, record }) {
                 <div 
                 // onClick={() => {
                 //     runRejected(token)
-                //     setTsStatus(true)
+                //     setTsRejStatus(true)
                 // }}
                 className="px-4 py-3 text-sm font-medium text-gray-400 dark:text-white  dark:bg-stone-700">
                     <div>Reject All</div>
@@ -46,7 +49,7 @@ function GoReject({ token, record }) {
                 <div 
                 onClick={() => {
                     runSlcRejected(token)
-                    setTsStatus(true)
+                    setTsRejStatus(true)
                 }}
                 className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
                     <div>Selected Only</div>
@@ -60,7 +63,7 @@ function GoReject({ token, record }) {
         //         <div 
         //         onClick={() => {
         //             runRejected(token)
-        //             setTsStatus(true)
+        //             setTsRejStatus(true)
         //         }}
         //         className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
         //             <div>One User Only</div>
@@ -73,7 +76,7 @@ function GoReject({ token, record }) {
     useEffect(() => {
   
     }, [
-        tsStatus
+        tsRejStatus
     ]);
 
     return (
@@ -81,7 +84,10 @@ function GoReject({ token, record }) {
             className="ml-4 cursor-pointer bg-red-400 hover:bg-red-300 text-white font-bold border-b-4 border-red-700 hover:border-red-400 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
             menu={{ items }}
             trigger={["click"]}
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => {
+                e.preventDefault()
+                runTimesheet(token)
+            }}
         >
             <Space>
                 <label

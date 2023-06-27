@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Profile = () => {
+function Profile() {
   return (
-    <div>Profile</div>
+    <div>This is Profile</div>
   )
 }
 

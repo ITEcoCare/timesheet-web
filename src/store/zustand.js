@@ -213,6 +213,7 @@ export const useStore = create((set) => ({
                 headers: {Authorization: `bearer ${token}`},
             }
             );
+            
             return Promise.resolve(result.data);
         } catch (error) {
             console.log(error);
@@ -234,8 +235,7 @@ export const useStore = create((set) => ({
         }
     },
     createTimesheet: async (token, val) => {
-        let ambilAcc = JSON.parse(localStorage.getItem("account"))   
-        console.log("masuk cr ts >> val", val)
+        
         try {
             const rc = await axios.post(`${url2}timesheet/create`,
                 {
@@ -249,7 +249,7 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            console.log("hasil cr ts", rc)
+
             toast(`Sukses membuat timesheet! 👍`, {
                 type: "success",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
@@ -263,6 +263,7 @@ export const useStore = create((set) => ({
                   'marginBottom': '40px',
                 },
             })
+
             return rc
 
         } catch (error) {
@@ -300,10 +301,10 @@ export const useStore = create((set) => ({
             console.log(error)
         }
     },
-    submitSlcTimesheet: async(token, val) => {
+    submitSlcTimesheet: async(token, val, bool) => {
         let temp = []
         for (let j = 0; j < val.length; j++) temp.push(val[j].timesheet_id)
-
+        
         try {
             const rc = await axios.post(`${url2}timesheet/save`,
                 {
@@ -314,8 +315,11 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
+
+            // set({ setTsStatus: false })
             toast(`Timesheet submitted! 👍`, {
                 icon: "🚀",
+                autoClose: 1500,
                 type: "warning",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
                 closeButton: false,
@@ -328,8 +332,10 @@ export const useStore = create((set) => ({
                   'marginBottom': '40px',
                 },
             })
-            set({ setTsStatus: true })
+            // setTimeout(function(){ window.location.href = "/timesheet"; }, 2000);
+
             return rc
+
         } catch (error) {
             console.log(error)
         }
@@ -351,6 +357,7 @@ export const useStore = create((set) => ({
             )
             
             toast(`Timesheet berhasil ter-update.`, {
+                autoClose: 1500,
                 type: "success",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
                 closeButton: false,
@@ -363,6 +370,7 @@ export const useStore = create((set) => ({
                     'marginBottom': '40px',
                 },
             })
+            
             return rc.data;
         } catch (error) {
             console.log(error);
@@ -383,8 +391,8 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            console.log("hasil apv ts", rc)
-            set({ setTsStatus: true })
+            // console.log("hasil apv ts", rc)
+            set({ setTsRejStatus: false })
             toast(`${rc.data.message} 👍`, {
                 type: "success",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
@@ -455,6 +463,7 @@ export const useStore = create((set) => ({
         let temp = []
         for (let j = 0; j < val.length; j++) temp.push(val[j].timesheet_id)
         console.log("masuk Slc approved",  temp)
+        // set({ setTsApvStatus: false })
         
         try {
             const rc = await axios.post(`${url2}timesheet/save`,
@@ -466,9 +475,10 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            set({ setTsStatus: true })
+            // set({ setTsApvStatus: false })
             toast(`${rc.data.message} 👍`, {
                 type: "success",
+                autoClose: 1500,
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
                 closeButton: false,
                 position: 'bottom-center',
@@ -480,6 +490,7 @@ export const useStore = create((set) => ({
                   'marginBottom': '40px',
                 },
             })
+            // setTimeout(function(){ window.location.href = "/timesheet"; }, 2000);
             return rc
 
         } catch (error) {
@@ -545,7 +556,7 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
-            set({ setTsStatus: true })
+            set({ setTsRejStatus: true })
             toast(`${rc.data.message}... 👍`, {
                 type: "warning",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
@@ -630,96 +641,96 @@ export const useStore = create((set) => ({
         let temp = []
         for (let j = 0; j < val.length; j++) temp.push(val[j].timesheet_id)
         console.log("masuk Slc reject",  temp)
-        // try {
-        //     const rc = await axios.post(`${url2}timesheet/save`,
-        //     {
-        //         action: "reject",
-        //         timesheet_id: temp
-        //     },  
-        //         {
-        //             headers: { Authorization: `bearer ${token}`},
-        //         }
-        //     )
-        //     set({ setTsStatus: true })
-        //     toast(`${rc.data.message}... 👍`, {
-        //         type: "warning",
-        //         theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
-        //         closeButton: false,
-        //         position: 'bottom-center',
-        //         hideProgressBar: false,
-        //         className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
-        //         style: {
-        //           width: "100%",
-        //           'borderRadius':'15px',
-        //           'marginBottom': '40px',
-        //         },
-        //     })
-        //     return rc
+        try {
+            const rc = await axios.post(`${url2}timesheet/save`,
+            {
+                action: "reject",
+                timesheet_id: temp
+            },  
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            set({ setTsRejStatus: false })
+            toast(`${rc.data.message}... 👍`, {
+                type: "warning",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                  width: "100%",
+                  'borderRadius':'15px',
+                  'marginBottom': '40px',
+                },
+            })
+            return rc
 
-        // } catch (error) {
-        //     if (val.timesheet_status == 1) {
-        //         toast(`Anda tidak memiliki wewenang terhadap timesheet ini!`, {
-        //             type: "error",
-        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
-        //             closeButton: false,
-        //             position: 'bottom-center',
-        //             hideProgressBar: false,
-        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
-        //             style: {
-        //               width: "100%",
-        //               'borderRadius':'15px',
-        //               'marginBottom': '40px',
-        //             },
-        //         })
-        //         console.log(error)
-        //     } else if (val.timesheet_status == 0){
-        //         toast(`timesheet ini belum dapat di reject...`, {
-        //             type: "info",
-        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
-        //             closeButton: false,
-        //             position: 'bottom-center',
-        //             hideProgressBar: false,
-        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
-        //             style: {
-        //               width: "100%",
-        //               'borderRadius':'15px',
-        //               'marginBottom': '40px',
-        //             },
-        //         })
-        //         console.log(error)
+        } catch (error) {
+            if (val.timesheet_status == 1) {
+                toast(`Anda tidak memiliki wewenang terhadap timesheet ini!`, {
+                    type: "error",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+            } else if (val.timesheet_status == 0){
+                toast(`timesheet ini belum dapat di reject...`, {
+                    type: "info",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
 
-        //     } else if (val.timesheet_status == 3){
-        //         toast(`timesheet ini sudah pernah di reject.`, {
-        //             type: "warning",
-        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
-        //             closeButton: false,
-        //             position: 'bottom-center',
-        //             hideProgressBar: false,
-        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
-        //             style: {
-        //               width: "100%",
-        //               'borderRadius':'15px',
-        //               'marginBottom': '40px',
-        //             },
-        //         })
-        //         console.log(error)
-        //     } else {
-        //         toast(`timesheet ini sudah di approve.`, {
-        //             type: "warning",
-        //             theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
-        //             closeButton: false,
-        //             position: 'bottom-center',
-        //             hideProgressBar: false,
-        //             className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
-        //             style: {
-        //               width: "100%",
-        //               'borderRadius':'15px',
-        //               'marginBottom': '40px',
-        //             },
-        //         })
-        //         console.log(error)
-        //     }
-        // }
+            } else if (val.timesheet_status == 3){
+                toast(`timesheet ini sudah pernah di reject.`, {
+                    type: "warning",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+            } else {
+                toast(`timesheet ini sudah di approve.`, {
+                    type: "warning",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+            }
+        }
     },
     
     
@@ -930,7 +941,12 @@ export const useStore = create((set) => ({
     setUpdTSModal: (val) => { set({ updTSModal: val }) },
     tsStatus: false,
     setTsStatus: (val) => set({ tsStatus: val }),
-    
+    tsApvStatus: false,
+    setTsApvStatus: (val) => set({ tsApvStatus: val }),
+    tsRejStatus: false,
+    setTsRejStatus: (val) => set({ tsRejStatus: val }),
+    showProfileModal: false,
+    setShowProfileModal: (val) => set({ showProfileModal: val }),
 
     showProjectModal: false,
     setShowProjectModal: (val) => { set({ showProjectModal: val }) },

@@ -86,7 +86,7 @@ const TimesheetUpdateModal = ({resVal}) => {
 
   return (
     <>
-      <div className="h-screen w-full z-20 bg-stone-800 bg-opacity-90 fixed left-0 top-0 flex justify-center items-center">
+      <div className=" h-screen w-full z-50 bg-stone-800 bg-opacity-90 fixed left-0 top-0 flex justify-center items-center">
         <form className="bg-white rounded-xl shadow-2xl w-2/4 " onSubmit={formik.handleSubmit}>
           <header className="flex flex-wrap bg-gray-200 rounded-t-xl py-4 px-4 items-center">
             <div className="w-full flex justify-end ">
@@ -101,7 +101,7 @@ const TimesheetUpdateModal = ({resVal}) => {
             <span className="font-bold text-xl flex ml-4 text-green-500">Edit Timesheet!</span>
     
             <label className={labelClass}>
-                <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">
+                <label className="pb-[13px] bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">
                     Date
                 </label>
                 <input
@@ -112,7 +112,7 @@ const TimesheetUpdateModal = ({resVal}) => {
                     onChange={formik.handleChange}
                     value={formik.values.work_date}
                     className={
-                        " w-11/12 fill-white dark:bg-stone-800 hover:bg-white-400  py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "
+                        "pt-[13px] w-full fill-white dark:bg-stone-800 hover:bg-white-400  py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "
                     }
                 />
             </label>
@@ -193,7 +193,7 @@ const TimesheetUpdateModal = ({resVal}) => {
                 />
             </label>
            
-            <div className="flex items-start mb-6">
+            {/* <div className="flex items-start mb-6">
               <div className="flex items-center h-5">
                 <input
                   id="terms"
@@ -215,7 +215,7 @@ const TimesheetUpdateModal = ({resVal}) => {
                   terms and conditions
                 </a>
               </label>
-            </div>
+            </div> */}
            
           </div>
           <footer className="flex justify-end border-t p-3 mt-5">

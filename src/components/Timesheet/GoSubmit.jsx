@@ -1,25 +1,22 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useStore } from "../../store/zustand";
 import { Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
-function GoSubmit( { token, record }) {
-
-    const submitTimesheet = useStore((state) => state.submitTimesheet);
+// function GoSubmit( { token, record, }) {
+const GoSubmit = ( { token, record, tsStatus, setTsStatus, runTimesheet }) => {
+// const Child = (props: ChildProps) => {
     const submitSlcTimesheet = useStore((state) => state.submitSlcTimesheet);
-    const tsStatus = useStore((state) => state.tsStatus);
-    const setTsStatus = useStore((state) => state.setTsStatus);
+    // const tsStatus = useStore((state) => state.tsStatus);
+    // const setTsStatus = useStore((state) => state.setTsStatus);
 
-    const runSubmitSlc =() => {
-        // console.log("masuk GoSubmit", record)
-        submitSlcTimesheet(token, record)
+    const runSubmitSlc =(bool) => {
         setTsStatus(true);
+        submitSlcTimesheet(token, record, bool)
+        // setTsStatus(false);
     }
 
     const runSubmitAll =() => {
-        // console.log("masuk GoSubmit", record)
-        submitTimesheet(token, record)
-        setTsStatus(true);
     }
     
     const items = [
@@ -27,8 +24,6 @@ function GoSubmit( { token, record }) {
             label: (
                 <div 
                 onClick={() => {
-                    runSubmitAll()
-                    setTsStatus(true)
                 }}
                 className="px-4 py-3 text-sm font-medium text-gray-400 dark:text-white  dark:bg-stone-700">
                     <div>Submit All</div>
@@ -41,22 +36,19 @@ function GoSubmit( { token, record }) {
             label: (
                 <div 
                 onClick={() => {
-                    runSubmitSlc()
-                    setTsStatus(true)
+                    runSubmitSlc(true)
                 }}
                 className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
                     <div>Selected Only</div>
                 </div>
             ),
             key: "1",
-            // disabled: true,
         },
     ];
 
     useEffect(() => {
-  
     }, [
-        tsStatus
+        tsStatus = false
     ]);
 
     return (
@@ -64,7 +56,10 @@ function GoSubmit( { token, record }) {
             className="ml-4 cursor-pointer bg-yellow-400 hover:bg-yellow-300 text-white font-bold border-b-4 border-yellow-700 hover:border-yellow-400 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
             menu={{ items }}
             trigger={["click"]}
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => {
+                e.preventDefault()
+                runTimesheet(token)
+            }}
         >
             <Space>
                 <label

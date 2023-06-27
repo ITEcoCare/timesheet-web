@@ -5,12 +5,15 @@ import Navbar from './Navbar'
 import { ToastContainer, toast } from 'react-toastify';
 import { useStore } from '../store/zustand';
 import { Link, Navigate } from 'react-router-dom';
-
+import TimesheetEventModal from "./Timesheet/TimesheetEventModal";
+import ProfileModal from './User/ProfileModal';
 
 
 const Home = () => {
 
   const initialState = useStore((state) => state.initialState);
+  const showEventModal = useStore((state) => state.showEventModal);
+  const showProfileModal = useStore((state) => state.showProfileModal);
   
   useEffect(() => {
     if (!initialState._isLoggedIn) {
@@ -33,6 +36,9 @@ const Home = () => {
       <div className='flex justify-center'>
         <Navbar></Navbar>
         <ToastContainer />
+        {showEventModal && <TimesheetEventModal />}
+        {showProfileModal && <ProfileModal />}
+
       </div>
       {/* <p className="font-extrabold text-3xl md:text-4xl mb-1 md:mb-3 ">Home Page Tetap</p> */}
         {/* <Toaster /> */}

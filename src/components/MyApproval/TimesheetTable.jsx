@@ -1,31 +1,9 @@
 import "regenerator-runtime/runtime";
 import React, { useEffect, useState } from "react";
-import {
-    useTable,
-    useGlobalFilter,
-    useAsyncDebounce,
-    useFilters,
-    useSortBy,
-    usePagination,
-} from "react-table";
+
 import { Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import ava from "../../assets/cak_lontong02.jpeg";
 import {Formik, useFormik } from "formik";
-
-import {
-    FaBeer,
-    FaAngleRight,
-    FaAngleLeft,
-    FaAngleDoubleLeft,
-    FaAngleDoubleRight,
-    FaTag,
-    FaPen,
-    FaTrash,
-    FaCheck,
-    FaTimes,
-    FaGripHorizontal,
-} from "react-icons/fa";
 import { useStore } from "../../store/zustand";
 import TimesheetEventModal from "./TimesheetEventModal";
 import TimesheetUpdateModal from "./TimesheetUpdateModal";
@@ -140,7 +118,7 @@ export const ActionButton = () => {
     );
 };
 
-const TableTimesheet = ({ columns, data }) => {
+const TableTimesheet = ({ }) => {
 
     //zustand
     const showEventModal = useStore((state) => state.showEventModal);
@@ -179,83 +157,13 @@ const TableTimesheet = ({ columns, data }) => {
     const [statTimes, setStatTimes] = useState(false);
     const [resVal, setResVal] = useState({});
     const [recordTs, setRecordTs] = useState([]);
+    const [tsApvStatus, setTsApvStatus] = useState(false)
+    const [tsRejStatus, setTsRejStatus] = useState(false)
+
 
 
     const [form] = Form.useForm();
 
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-
-        page,
-        canPreviousPage,
-        canNextPage,
-        pageOptions,
-        pageCount,
-        gotoPage,
-        nextPage,
-        previousPage,
-        setPageSize,
-
-        state, // new
-        preGlobalFilteredRows, // new
-        setGlobalFilter, // new
-    } = useTable(
-        {
-            columns,
-            data,
-        },
-        useFilters, // new
-        useGlobalFilter,
-        useSortBy, //new
-        usePagination //new
-    );
-
-    const GlobalFilter = ({
-        preGlobalFilteredRows,
-        globalFilter,
-        setGlobalFilter,
-    }) => {
-        const count = preGlobalFilteredRows.length;
-        const [value, setValue] = React.useState(globalFilter);
-        const onChange = useAsyncDebounce((value) => {
-            setGlobalFilter(value || undefined);
-        }, 1000);
-
-        return (
-            <label className="flex items-baseline">
-                <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">
-                    <span className="">Search</span>
-                </label>
-                <input
-                    // readOnly
-                    value={value || ""}
-                    onChange={(e) => {
-                        setValue(e.target.value);
-                        onChange(e.target.value);
-                    }}
-                    className={
-                        "fill-white dark:bg-stone-800 hover:bg-white-400 font-bold py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "
-                    }
-                    placeholder={`${count} records`}
-                />
-            </label>
-        );
-    };
-
-    const titleHeader = (val) => {
-        // {
-        //     "2023-04-14": 2,
-        // },
-        for (let i = 0; i < activities.length; i++) {
-            // console.log("currTimesheet title", currTimesheet[i].activities.activity_work_date)
-            const temp = Object.keys(activities[val]);
-            return <span>{temp}</span>;
-        }
-    };
 
     const hourFormat = (val) => {
         return val > 1 ? `${val} hours` : `${val} hour`;
@@ -267,7 +175,6 @@ const TableTimesheet = ({ columns, data }) => {
     const runTimesheet = async (token, inputs) => {
         let res = await getMyApproval(token, isiDate);
         if(res.success){
-            // console.log("res.result", isiDate, res.result)
             const data = [];
             for (let j = 0; j < res.result.timesheet.length; j++) {
                 let temp = res.result.timesheet[j];
@@ -287,6 +194,7 @@ const TableTimesheet = ({ columns, data }) => {
                      employee_nik: `${temp.employee_nik}`,
                      employee_fullname: `${temp.employee_fullname}`,
                 });
+                data.sort(function(a,b){ return b.key - a.key; });
             }
             setDataSource(data);
 
@@ -312,7 +220,6 @@ const TableTimesheet = ({ columns, data }) => {
 
         let resP = await getProject(accessToken);
         if(resP.data.success){
-            //  console.log("currTimesheet --", currTimesheet);
              const dataPJ = [];
              let p = resP.data.result
              for (let k = 0; k < p.length; k++) {
@@ -328,101 +235,21 @@ const TableTimesheet = ({ columns, data }) => {
          }
     }
 
-    function myFunction(accessToken, record) {
-        
-        if (confirm("Are you sure?") == true) {
-            delProject(accessToken, record);
-        }
-    }
-
-    // const runSubmit =(_, record) => {
-    //     // alert('here..')
-    //     // setShowEventModal(true);
-    //     submitTimesheet(accessToken)
-    //     setTsStatus(true);
-    // }
-
-    // const runApprove = (_, record) => {
-    //     approveTimesheet(accessToken, record);
-    //     setTsStatus(true);
-    // }
-    
-    // const runRejected = (_, record) => {
-    //     rejectTimesheet(accessToken, record);
-    //     setTsStatus(true);
-    //     // if (alert('are you sure you want to reject all timesheet?')) {
-    //     //     // rejectTimesheet(accessToken, record);
-    //     //     setTsStatus(true);
-    //     // }
-    // }
-
-    const runEdit =(_, record) => {
-        // console.log("resVal", record)
-        //   {
-        //     "timesheet_id": 20,
-        //     "project_id": 10,
-        //     "tag_id": 1,
-        //     "duration": 5,
-        //     "work_date": "2023-06-14",
-        //     "description": "coba update - assist cabang"
-        // }
-        setResVal(record)
-        setUpdTSModal(true);
-    }
-
-    const runDelete =(token, record)=> {
-        console.log("record dari delete", record)
-    }
-
-
     const columnsTable = [
         {
             title: "Project Name",
             dataIndex: "name",
-            defaultSortOrder: 'descend',
             sorter: (a, b) => (a.name > b.name ? -1 : 1),
             key: "name",
-            // fixed: "left",
             render: (text, record) => {
-                // if (editingRow === record.key) {
-                //     return {
-                //         props: {
-                //             style: { background: parseInt(text) > 50 ? "red" : "green" }
-                //         },
-                //         children: 
-                //         <div>
-                //             <Form.Item
-                //                 name="name" //crucial for value
-                //                 className="m-0"
-                //                 rules={[
-                //                     {
-                //                         required: true,
-                //                         message: "Please enter the project name.",
-                //                     },
-                //                 ]}
-                //             >
-                //                 <Input
-                //                     className={
-                //                         " placeholder:text-stone-400 dark:text-stone-50 fill-white dark:bg-stone-800 hover:bg-white-400 font-bold border-b-4 dark:border-stone-900 border-gray-200 rounded-xl shadow-inner hover:bg-gray-100 "
-                //                     }
-                //                 />
-                //             </Form.Item>
-                //         </div>
-                        
-                //     };
-                // } else {
-                // }
                 return <p>{text}</p>;
             },
         },
         {
             title: `Status`,
-            // fixed: "left",
             dataIndex: "timesheet_status",
             key: "timesheet_status",
-            defaultSortOrder: 'ascend',
             sorter: (a, b) => (a.timesheet_status > b.timesheet_status ? -1 : 1),
-            // width: 120,
             render: (text, record) => {
                 // 0:drafted, 1:submitted, 2:approved, 3:rejected,
                 if (text == 0) {
@@ -447,7 +274,6 @@ const TableTimesheet = ({ columns, data }) => {
         {
             title: `Date`,
             dataIndex: "timesheet_work_date",
-            defaultSortOrder: 'descend',
             // sorter: (a, b) => Date(a.timesheet_work_date) - Date(b.timesheet_work_date),
             key: "timesheet_work_date",
             render: (text, record) => {
@@ -459,36 +285,11 @@ const TableTimesheet = ({ columns, data }) => {
             dataIndex: "tag_name",
             key: "tag_name",
             render: (text, record) => {
-                // if (editingRow === record.key) {
-                //     return (
-                //         <Form.Item
-                //             name="tag_name" //crucial for value
-                //             className="m-0"
-                //             rules={[
-                //                 {
-                //                     required: true,
-                //                     message: "Please enter the activity.",
-                //                 },
-                //             ]}
-                //         >
-                //             <Input
-                //                 className={
-                //                     " placeholder:text-stone-400 dark:text-stone-50 fill-white dark:bg-stone-800 hover:bg-white-400 border-b-4 dark:border-stone-900 border-gray-200 rounded-xl shadow-inner hover:bg-gray-100 "
-                //                 }
-                //             />
-                //         </Form.Item>
-                //     );
-                // } else {
-                // }
                     return <p>{text}</p>;
             },
         },
         {
             title: `Description`,
-            // ${dayjs(`${titleHeader(0).props.children}`).format(
-            //     "MMM D, YY"
-            // )}
-            
             dataIndex: "timesheet_description",
             key: "timesheet_description",
             render: (text, record) => {
@@ -499,87 +300,12 @@ const TableTimesheet = ({ columns, data }) => {
             title: `Duration`,
             dataIndex: "timesheet_duration",
             name: "timesheet_duration",
-            defaultSortOrder: 'descend',
             sorter: (a, b) => (a.timesheet_duration) - (b.timesheet_duration),
             key: "timesheet_duration",
             render: (text, record) => {
                 return text > 1 
                 ? <p>{text} hours</p> 
                 : <p>{text} hour</p>
-            },
-        },
-        {
-            title: "Action",
-            key: "operation",
-            fixed: "right",
-            render: (_, record) => {
-                if (record.timesheet_status == 0) { setStatTimes(true)
-                } else if (record.timesheet_status == 1) {setStatTimes(true)
-                } else if (record.timesheet_status == 2) {setStatTimes(true)
-                } else if (record.timesheet_status == 3) setStatTimes(true) 
-                return (
-                    <div className="flex flex-wrap">
-                        <div className=' mr-5'>
-                            <div className='w-6 relative before:z-10 before:absolute before:left-1/2 before:-top-3 before:w-max before:max-w-xs before:-translate-x-1/2 before:-translate-y-full before:rounded-lg before:bg-gray-700 before:px-2 before:py-1.5 before:text-white before:invisible before:content-[attr(data-tip)] after:z-10 after:absolute after:left-1/2 after:-top-3 after:h-0 after:w-0 after:-translate-x-1/2 after:border-8 after:border-t-gray-700 after:border-l-transparent after:border-b-transparent after:border-r-transparent after:invisible hover:before:visible hover:after:visible'
-                                data-tip='Edit'>
-                                <button 
-                                type="secondary"
-                                onClick={() => {
-                                    runEdit(_, record)
-                                }}
-                                className='m-1 p-2 border-b-4 rounded-lg  border-b-blue-600 font-bold bg-blue-500 text-stone-100  hover:border-blue-900 hover:bg-blue-600'>
-                                    <svg className="w-5 h-5 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M24,8H0v-1C0,4.243,2.243,2,5,2h1V1c0-.552,.447-1,1-1s1,.448,1,1v1h8V1c0-.552,.447-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5v1Zm-14,14.545c0-.892,.187-1.753,.535-2.545H6c-.553,0-1-.448-1-1s.447-1,1-1c0,0,4.022,0,5.92,.001l2.001-2.001H6c-.553,0-1-.448-1-1s.447-1,1-1H15.922l2.741-2.741c.812-.812,1.891-1.259,3.039-1.259H0v9c0,2.757,2.243,5,5,5h5v-1.455Zm10.077-9.872c.897-.897,2.353-.897,3.25,0,.897,.897,.897,2.353,0,3.25l-6.807,6.807c-.813,.813-1.915,1.27-3.065,1.27h-1.455v-1.455c0-1.15,.457-2.252,1.27-3.065l6.807-6.807Z"/></svg>
-
-                                </button>
-                            </div>
-                        </div>
-                        <div className='mr-5'>
-                            <div className='w-6 relative before:z-10 before:absolute before:left-1/2 before:-top-3 before:w-max before:max-w-xs before:-translate-x-1/2 before:-translate-y-full before:rounded-lg before:bg-gray-700 before:px-2 before:py-1.5 before:text-white before:invisible before:content-[attr(data-tip)] after:z-10 after:absolute after:left-1/2 after:-top-3 after:h-0 after:w-0 after:-translate-x-1/2 after:border-8 after:border-t-gray-700 after:border-l-transparent after:border-b-transparent after:border-r-transparent after:invisible hover:before:visible hover:after:visible'
-                                data-tip='Delete'>
-                                <button 
-                                type="secondary"
-                                onClick={() => {
-                                    runDelete(_, record)
-                                }}
-                                className='m-1 p-2 border-b-4 rounded-lg border-b-stone-600 font-bold bg-stone-400 text-stone-100  hover:border-stone-900 hover:bg-stone-500'>
-                                <svg className="w-5 h-5 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512">
-                                    <path d="M0,10v9c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V10H0Zm15,8h-6c-.552,0-1-.448-1-1s.448-1,1-1h6c.552,0,1,.448,1,1s-.448,1-1,1ZM0,8v-1C0,4.243,2.243,2,5,2h1V1c0-.552,.448-1,1-1s1,.448,1,1v1h8V1c0-.552,.448-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5v1H0Z"/>
-                                </svg>
-                                </button>
-                            </div>
-                        </div>
-                        {/* { userData.employee_lead && 
-                            <>
-                                <div className='mr-5'>
-                                    <div className='w-6 relative before:z-10 before:absolute before:left-1/2 before:-top-3 before:w-max before:max-w-xs before:-translate-x-1/2 before:-translate-y-full before:rounded-lg before:bg-gray-700 before:px-2 before:py-1.5 before:text-white before:invisible before:content-[attr(data-tip)] after:z-10 after:absolute after:left-1/2 after:-top-3 after:h-0 after:w-0 after:-translate-x-1/2 after:border-8 after:border-t-gray-700 after:border-l-transparent after:border-b-transparent after:border-r-transparent after:invisible hover:before:visible hover:after:visible'
-                                        data-tip='Approve'>
-                                        <button 
-                                        type="secondary"
-                                        onClick={() => {
-                                            runApprove(_, record)
-                                        }}
-                                        className='m-1 p-2 border-b-4 rounded-lg  border-b-green-700 font-bold bg-green-500 text-stone-100  hover:border-green-900 hover:bg-green-700'>
-                                            <svg className="w-5 h-5 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M0,8v-1C0,4.243,2.243,2,5,2h1V1c0-.552,.447-1,1-1s1,.448,1,1v1h8V1c0-.552,.447-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5v1H0Zm24,2v9c0,2.757-2.243,5-5,5H5c-2.757,0-5-2.243-5-5V10H24Zm-6.168,3.152c-.384-.397-1.016-.409-1.414-.026l-4.754,4.582c-.376,.376-1.007,.404-1.439-.026l-2.278-2.117c-.403-.375-1.035-.354-1.413,.052-.376,.404-.353,1.037,.052,1.413l2.252,2.092c.566,.567,1.32,.879,2.121,.879s1.556-.312,2.108-.866l4.74-4.568c.397-.383,.409-1.017,.025-1.414Z"/></svg>
-                                    </button>
-                                    </div>
-                                </div>
-                                <div className='mr-5'>
-                                    <div className='w-6 relative before:z-10 before:absolute before:left-1/2 before:-top-3 before:w-max before:max-w-xs before:-translate-x-1/2 before:-translate-y-full before:rounded-lg before:bg-gray-700 before:px-2 before:py-1.5 before:text-white before:invisible before:content-[attr(data-tip)] after:z-10 after:absolute after:left-1/2 after:-top-3 after:h-0 after:w-0 after:-translate-x-1/2 after:border-8 after:border-t-gray-700 after:border-l-transparent after:border-b-transparent after:border-r-transparent after:invisible hover:before:visible hover:after:visible'
-                                        data-tip='Reject'>
-                                        <button 
-                                        type="secondary"
-                                        onClick={() => {
-                                            runRejected(_, record)
-                                        }}
-                                        className='m-1 p-2 border-b-4 rounded-lg  border-b-red-600 font-bold bg-red-400 text-stone-100 hover:border-red-900 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'>
-                                        <svg className="w-5 h-5 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="m24,7v1H0v-1C0,4.243,2.243,2,5,2h1v-1c0-.552.448-1,1-1s1,.448,1,1v1h8v-1c0-.552.448-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5Zm0,3v9c0,2.757-2.243,5-5,5H5c-2.757,0-5-2.243-5-5v-9h24Zm-10.586,7l2.293-2.293c.391-.391.391-1.023,0-1.414s-1.023-.391-1.414,0l-2.293,2.293-2.293-2.293c-.391-.391-1.023-.391-1.414,0s-.391,1.023,0,1.414l2.293,2.293-2.293,2.293c-.391.391-.391,1.023,0,1.414.195.195.451.293.707.293s.512-.098.707-.293l2.293-2.293,2.293,2.293c.195.195.451.293.707.293s.512-.098.707-.293c.391-.391.391-1.023,0-1.414l-2.293-2.293Z"/></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </>
-                        } */}
-                    </div>
-                );
             },
         },
     ];
@@ -598,78 +324,6 @@ const TableTimesheet = ({ columns, data }) => {
         }),
     };
 
-    // const items = [
-    //     {
-    //         label: (
-    //             <div 
-    //             onClick={() => {
-    //                 runSubmit(accessToken)
-    //                 setTsStatus(true)
-    //             }}
-    //             className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-    //                 <div>Submit All</div>
-    //             </div>
-    //         ),
-    //         key: "0",
-    //     },
-    //     {
-    //         label: (
-    //             <div 
-    //             className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-    //                 <div>Selected Only</div>
-    //             </div>
-    //         ),
-    //         key: "1",
-    //     },
-    // ];
-
-    // const itemsApv = [
-    //     {
-    //         label: (
-    //             <div 
-    //             onClick={() => {
-    //                 runApprove(_, record)
-    //             }}
-    //             className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-    //                 <div>Approve All</div>
-    //             </div>
-    //         ),
-    //         key: "0",
-    //     },
-    //     {
-    //         label: (
-    //             <div 
-    //             className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-    //                 <div>Selected Only</div>
-    //             </div>
-    //         ),
-    //         key: "1",
-    //     },
-    // ];
-
-    // const itemsRej = [
-    //     {
-    //         label: (
-    //             <div 
-    //             onClick={() => {
-    //                 runRejected(_, record)
-    //             }}
-    //             className="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-    //                 <div>Reject All</div>
-    //             </div>
-    //         ),
-    //         key: "0",
-    //     },
-    //     {
-    //         label: (
-    //             <div 
-    //             className=" px-4 py-3 text-sm font-medium text-gray-900 dark:text-white  dark:bg-stone-700">
-    //                 <div>Selected Only</div>
-    //             </div>
-    //         ),
-    //         key: "1",
-    //     },
-    // ];
 
 
     const onFinish = (values) => {
@@ -695,8 +349,6 @@ const TableTimesheet = ({ columns, data }) => {
             // alert(JSON.stringify(values));
             runTimesheet(accessToken, values)
             setIsiDate(values.date)
-
-            // onFilteredEmploy(accessToken, values.employee_id)
         },
         // handleOnChange: (value, event) => {
         //     console.log("handleOnChange", value, event)     
@@ -759,80 +411,18 @@ const TableTimesheet = ({ columns, data }) => {
         weekDurEmploy,
         weekHour,
         updTSModal,
-        tsStatus
+        tsStatus,
+        tsApvStatus,
+        tsRejStatus
     ]);
 
     return (
         <>           
             {updTSModal && <TimesheetUpdateModal resVal={resVal} />}
+
             <div className="grid md:grid-cols-3 gap-8">
-                <div className="items-center justify-center hidden col-span-3 space-x-2 sm:flex">
-                    <form onSubmit={formik.handleSubmit} className=" rounded-2xl">
-                    {/* <form form={form} className=" rounded-2xl"> */}
-
-                        <label className="pb-[17px] fill-white font-bold text-white bg-blue-500 dark:bg-blue-800 hover:bg-white-400  py-3 px-4 border-b-4 dark:border-blue-900 border-blue-700 rounded-l-xl shadow-inner hover:bg-blue-400 hover:border-blue-500 ">
-                            Date
-                        </label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="date"
-                            defaultValue={now}
-                            onChange={formik.handleChange}
-                            value={formik.values.date}
-                            className={"pt-[16px] fill-white dark:bg-stone-800 hover:bg-white-400 mr-4 py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100"}
-                        />
-
-                        <label className="pb-[17px] fill-white font-bold text-white bg-blue-500 dark:bg-blue-800 hover:bg-white-400  py-3 px-4 border-b-4 dark:border-blue-900 border-blue-700 rounded-l-xl shadow-inner hover:bg-blue-400 hover:border-blue-500 ">
-                            Employee
-                        </label>
-                        <select
-                            className={"pb-[14px] pt-[10px] fill-white dark:bg-stone-800 hover:bg-white-400  mr-4 py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100"}
-                            onChange={formik.handleChange}
-                            id="employee_id"
-                            name="employee_id"
-                            value={formik.values.employee_id}
-                        >
-                            <option >Select employee</option>
-                            {
-                                weekDur.map((option, i) => (
-                                    <option key={i} value={option.fk_employee_id}>
-                                        {option.fk_employee_id} - {option.employee_fullname}
-                                    </option>
-                                ))
-                            }
-                        </select>
-
-                        <button type="submit" className=" font-bold bg-green-500 hover:bg-green-600 px-6 py-2 rounded-xl text-white border-b-4 border-b-green-700" >
-                            Go
-                        </button>
-
-                    </form>
-                </div>
                 
-                <div className="bg-stone-100 max-h-[450px] dark:bg-stone-800 dark:border-b-stone-600 border-b-gray-400 border-b-4 rounded-xl border-stone-200 dark:border-stone-700 p-4 md:p-8">
-                    
-                    {/* <Form form={form} className=" rounded-2xl">
-                        <label className="fill-white font-bold text-white bg-blue-500 dark:bg-blue-800 hover:bg-white-400  py-3 px-4 border-b-4 dark:border-blue-900 border-blue-700 rounded-l-xl shadow-inner hover:bg-blue-400 hover:border-blue-500 ">
-                            Date
-                        </label>
-                        <select
-                            className={"fill-white dark:bg-stone-800 hover:bg-white-400  mr-4 py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "}
-                            onChange={ onFilter(accessToken)}
-                            id="employee_id"
-                            name="employee_id"
-                            value={formik.values.employee_id}
-                        >
-                            <option >Select employeee</option>
-                            {
-                                weekDur.map((option, i) => (
-                                    <option key={i} value={option.fk_employee_id}>
-                                        {option.fk_employee_id} - {option.employee_fullname}
-                                    </option>
-                                ))
-                            }
-                        </select>
-                    </Form> */}
+                <div className="col-start-1 overflow-y-scroll max-h-[300px] bg-stone-100  dark:bg-stone-800 dark:border-b-stone-600 border-b-gray-400 border-b-4 rounded-xl border-stone-200 dark:border-stone-700 p-4 md:p-8">
                     <a
                         href="#"
                         className=" text-stone-900 text-3xl font-extrabold inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-stone-700 dark:text-green-400 mb-2"
@@ -891,7 +481,7 @@ const TableTimesheet = ({ columns, data }) => {
                     </a>
                     */}
                 </div>  
-                <div className=" overflow-y-scroll max-h-[450px] bg-stone-100 dark:bg-stone-800 dark:border-b-stone-600 border-b-gray-400 border-b-4 rounded-xl border-stone-200 dark:border-stone-700 md:p-8">
+                <div className="overflow-y-scroll max-h-[300px] bg-stone-100 dark:bg-stone-800 dark:border-b-stone-600 border-b-gray-400 border-b-4 rounded-xl border-stone-200 dark:border-stone-700 md:p-8">
                     <a href="#" className=" text-stone-900 text-3xl font-extrabold inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-stone-700 dark:text-green-400 mb-2">
                     <svg className="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="m0,19c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5v-9H0v9Zm3-4c0-1.103.897-2,2-2h2c1.103,0,2,.897,2,2v2c0,1.103-.897,2-2,2h-2c-1.103,0-2-.897-2-2v-2Zm4.001,2h-2.001v-2h2v2ZM24,7v1H0v-1C0,4.243,2.243,2,5,2h1v-1c0-.552.448-1,1-1s1,.448,1,1v1h8v-1c0-.552.448-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5Z"/></svg>
                         Daily View
@@ -954,7 +544,7 @@ const TableTimesheet = ({ columns, data }) => {
                         }
                     </div>
                 </div>
-                <div className="bg-stone-100 max-h-[450px] dark:bg-stone-800 dark:border-b-stone-600 border-b-gray-400 border-b-4 rounded-xl border-stone-200 dark:border-stone-700 p-4 md:p-8">
+                <div className="overflow-y-scroll max-h-[300px] bg-stone-100  dark:bg-stone-800 dark:border-b-stone-600 border-b-gray-400 border-b-4 rounded-xl border-stone-200 dark:border-stone-700 p-4 md:p-8">
                     <h2 className="text-stone-900 dark:text-white text-3xl font-extrabold mb-2">
                         Collect Your Daily Activities
                     </h2>
@@ -996,129 +586,68 @@ const TableTimesheet = ({ columns, data }) => {
 
             <div className="w-full mb-8">
                 <div className="grid grid-cols-3">
-                    <div className="col-start-1">
-                        <button
-                            onClick={() => {
-                                setShowEventModal(true);
-                                // getProjectByUser(accessToken);
-                                // setShowProjectModal(true);
-                                // getTimesheet('contoh isian values');
-                                // createAWeek();
-                                getProject(accessToken)
-                            }}
-                            className="flex items-baseline py-2 px-4   cursor-pointer bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                        >
-                            Add Timesheet
-                        </button>
+                    <div className="col-start-1 px-4">
+                        
                     </div>
                     <div className="col-span-1 ">
-                        
+                        <form onSubmit={formik.handleSubmit} className=" rounded-2xl">
+                        {/* <form form={form} className=" rounded-2xl"> */}
+
+                            <label className="pb-[17px] fill-white font-bold text-white bg-blue-500 dark:bg-blue-800 hover:bg-white-400  py-3 px-4 border-b-4 dark:border-blue-900 border-blue-700 rounded-l-xl shadow-inner hover:bg-blue-400 hover:border-blue-500 ">
+                                Date
+                            </label>
+                            <input
+                                type="date"
+                                id="date"
+                                name="date"
+                                defaultValue={now}
+                                onChange={formik.handleChange}
+                                value={formik.values.date}
+                                className={"pt-[16px] fill-white dark:bg-stone-800 hover:bg-white-400 mr-4 py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100"}
+                            />
+
+                            {/* <label className="pb-[17px] fill-white font-bold text-white bg-blue-500 dark:bg-blue-800 hover:bg-white-400  py-3 px-4 border-b-4 dark:border-blue-900 border-blue-700 rounded-l-xl shadow-inner hover:bg-blue-400 hover:border-blue-500 ">
+                                Employee
+                            </label>
+                            <select
+                                className={"pb-[14px] pt-[10px] fill-white dark:bg-stone-800 hover:bg-white-400  mr-4 py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100"}
+                                onChange={formik.handleChange}
+                                id="employee_id"
+                                name="employee_id"
+                                value={formik.values.employee_id}
+                            >
+                                <option >Select employee</option>
+                                {
+                                    weekDur.map((option, i) => (
+                                        <option key={i} value={option.fk_employee_id}>
+                                            {option.fk_employee_id} - {option.employee_fullname}
+                                        </option>
+                                    ))
+                                }
+                            </select> */}
+
+                            <button type="submit" className=" font-bold bg-green-500 hover:bg-green-600  px-6 pt-[11px] pb-[14px] rounded-xl text-white border-b-4 border-b-green-700" >
+                                Go
+                            </button>
+
+                        </form>
                     </div>
                     <div className="col-span-1 flex justify-end ">
                         
-                        {/* <GoSubmit token={accessToken}/> */}
-                      
-                        { userData.employee_lead && <GoApprove token={accessToken} record={recordTs}/> }
-                        { userData.employee_lead && <GoReject token={accessToken} record={recordTs}/> }
+                        { userData.employee_lead && <GoApprove token={accessToken} record={recordTs} tsApvStatus={tsApvStatus} setTsApvStatus={setTsApvStatus} runTimesheet={runTimesheet} /> }
+                        { userData.employee_lead && <GoReject token={accessToken} record={recordTs} runTimesheet={runTimesheet} /> }
                         
-                        {/* <Dropdown
-                            className="ml-4 cursor-pointer bg-red-500 hover:bg-red-400 text-white font-bold border-b-4 border-red-700 hover:border-red-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                            menu={{ itemsRej }}
-                            trigger={["click"]}
-                            onClick={(e) => e.preventDefault()}
-                        >
-                            <Space >
-                                <label
-                                    className="ml-5 cursor-pointer focus:ring-4 focus:outline-nonetext-center inline-flex items-center py-2"
-                                    
-                                    id="dropdownDefaultButton" 
-                                    data-dropdown-toggle="dropdown"
-                                >
-                                    <svg className="w-5 h-5 mr-2 -ml-1 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M0,8v-1C0,4.243,2.243,2,5,2h1V1c0-.552,.447-1,1-1s1,.448,1,1v1h8V1c0-.552,.447-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5v1H0Zm24,2v9c0,2.757-2.243,5-5,5H5c-2.757,0-5-2.243-5-5V10H24Zm-6.168,3.152c-.384-.397-1.016-.409-1.414-.026l-4.754,4.582c-.376,.376-1.007,.404-1.439-.026l-2.278-2.117c-.403-.375-1.035-.354-1.413,.052-.376,.404-.353,1.037,.052,1.413l2.252,2.092c.566,.567,1.32,.879,2.121,.879s1.556-.312,2.108-.866l4.74-4.568c.397-.383,.409-1.017,.025-1.414Z"/></svg>
-                                    Rejected?
-                                </label>
-                                <DownOutlined className="mr-4 pb-1 font-bold"/>
-                            </Space>
-                        </Dropdown> */}
-                        {/* <button
-                            onClick={() => {
-                                // setShowEventModal(false);
-                                // runSubmit(accessToken)
-                                alert("Rejected!")
-                            }}
-                            className="ml-4 focus:ring-4 focus:outline-none focus:ring-blue-300 text-sm text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
-                            py-2 px-4   cursor-pointer bg-red-500 hover:bg-red-300 text-white font-bold border-b-4 border-red-700 hover:border-red-400 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                        >
-
-                            <svg className="w-5 h-5 mr-2 -ml-1 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="m24,7v1H0v-1C0,4.243,2.243,2,5,2h1v-1c0-.552.448-1,1-1s1,.448,1,1v1h8v-1c0-.552.448-1,1-1s1,.448,1,1v1h1c2.757,0,5,2.243,5,5Zm0,3v9c0,2.757-2.243,5-5,5H5c-2.757,0-5-2.243-5-5v-9h24Zm-10.586,7l2.293-2.293c.391-.391.391-1.023,0-1.414s-1.023-.391-1.414,0l-2.293,2.293-2.293-2.293c-.391-.391-1.023-.391-1.414,0s-.391,1.023,0,1.414l2.293,2.293-2.293,2.293c-.391.391-.391,1.023,0,1.414.195.195.451.293.707.293s.512-.098.707-.293l2.293-2.293,2.293,2.293c.195.195.451.293.707.293s.512-.098.707-.293c.391-.391.391-1.023,0-1.414l-2.293-2.293Z"/></svg>
-                            Rejected!
-                        </button> */}
                     </div>
                 </div>
             </div>
 
-            {/* <div className="mt-4 mb-4 grid grid-cols-3">
-
-                <div className="flex col-auto sm:col-span-1">
-                    <button
-                        onClick={() => {
-                            setShowEventModal(true);
-                            // getProjectByUser(accessToken);
-                            // setShowProjectModal(true);
-                            // getTimesheet('contoh isian values');
-                            // createAWeek();
-                            getProject(accessToken)
-                        }}
-                        className="flex items-baseline py-2 px-4   cursor-pointer bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                    >
-                        Add Timesheet
-                    </button>
-                </div>
-                <div className="items-center justify-center hidden col-span-1 space-x-2 sm:flex">
-                    <Form form={form} className=" rounded-2xl">
-                        <label className="fill-white font-bold text-white bg-blue-500 dark:bg-blue-800 hover:bg-white-400  py-3 px-4 border-b-4 dark:border-blue-900 border-blue-700 rounded-l-xl shadow-inner hover:bg-blue-400 hover:border-blue-500 ">
-                            Date
-                        </label>
-                        <input
-                            type="date"
-                            onChange={(e) => {
-                                onFiltered(accessToken, e.target.value)
-                            }}
-                            className={"fill-white dark:bg-stone-800 hover:bg-white-400  py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "}
-                        />
-                    </Form>
-                </div>
-                
-                <div className="flex justify-end col-auto">
-                    <button
-                        onClick={() => {
-                            setShowEventModal(false);
-                            runSubmit(accessToken)
-                            // runSubmit(_, record)
-                        }}
-                        className="flex items-baseline py-2 px-4   cursor-pointer bg-red-500 hover:bg-red-400 text-white font-bold border-b-4 border-red-700 hover:border-red-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-                    >
-                        Submit!
-                    </button>
-                </div>
-            </div> */}
             <div className="mb-4 z-10 bg-stone-100 border-b-4 border-stone-400 rounded-2xl">
                 <Form form={form} onFinish={onFinish} className="p-2 rounded-2xl">
-                    
-                    {/* <Radio.Group
-                        onChange={({ target: { value } }) => {
-                        setSelectionType(value);
-                        }}
-                        value={selectionType}
-                    >
-                        <Radio value="checkbox">Checkbox</Radio>
-                        <Radio value="radio">radio</Radio>
-                    </Radio.Group> */}
 
                     <Table
                         rowSelection={ 
                             {
-                                type: selectionType,
+                                type: 'checkbox',
                                 columnWidth: 0,
                                 fixed: true,
                                 ...rowSelection,
@@ -1134,7 +663,6 @@ const TableTimesheet = ({ columns, data }) => {
                         }}
                     />
                 </Form>
-
             </div>
         </>
     );

@@ -16,7 +16,7 @@ const Intro = () => {
     const theme = useStore((state) => state.theme);
 
     const myUser = JSON.parse(localStorage.getItem("account"));
-    console.log("myUser", myUser);
+    // console.log("myUser", myUser);
 
     useEffect(() => {}, [theme]);
 

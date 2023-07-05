@@ -5,104 +5,15 @@ import UpdateProjectModal from "./UpdateProjectModal";
 import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
 import Tag from "./Tag";
 import {
-    useTable,
-    useGlobalFilter,
-    useAsyncDebounce,
-    useFilters,
-    useSortBy,
-    usePagination,
-} from "react-table";
-import {
     FaBeer,
     FaAngleRight,
-    FaAngleLeft,
-    FaAngleDoubleLeft,
-    FaAngleDoubleRight,
-    FaTag,
-    FaPen,
-    FaTrash,
-    FaCheck,
-    FaTimes,
-    FaGripHorizontal,
 } from "react-icons/fa";
 import { useStore } from "../../store/zustand";
-// import TimesheetEventModal from "./Timesheet/TimesheetEventModal";
-// import Tempo from "../Tempo";
-
 import {
-    Button,
-    Switch,
     Table,
     Form,
-    Input,
-    InputNumber,
-    Pagination,
 } from "antd";
-// import { getData } from "../store/dummy";
-// import CalendarDay from "../Calendar/CalendarDay";
-// import CalendarMonth from "../Calendar/CalendarMonth";
-// import InputMonth from "../Temp/InputMonth";
-// import dayjs from "dayjs";
-// import { getMonth } from "../../utils/util";
-
-export const SelectColumnFilter = ({
-    column: { filterValue, setFilter, preFilteredRows, id, render },
-}) => {
-    const options = React.useMemo(() => {
-        const options = new Set();
-        preFilteredRows.forEach((row) => {
-            options.add(row.values[id]);
-        });
-        return [...options.values()];
-    }, [id, preFilteredRows]);
-
-    // Render a multi-select box
-    return (
-        <label className="flex items-baseline">
-            <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">
-                <span className=""> {render("Header")} </span>
-            </label>
-            {/* <span className="text-gray-700">{render("Header")}: </span> */}
-            <select
-                className="
-        fill-white dark:bg-stone-800 hover:bg-white-400 font-bold py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 w-32"
-                name={id}
-                id={id}
-                value={filterValue}
-                onChange={(e) => {
-                    setFilter(e.target.value || undefined);
-                }}
-            >
-                <option value="">All</option>
-                {options.map((option, i) => (
-                    <option key={i} value={option}>
-                        {option}
-                    </option>
-                ))}
-            </select>
-        </label>
-    );
-};
-
-export const AvatarCell = ({ value, column, row }) => {
-    return (
-        <div className="flex items-center">
-            <div className="flex-shrink-0 h-10 w-10">
-                <img
-                    className="h-10 w-10 rounded-full"
-                    src={row.original[column.imgAccessor]}
-                    alt=""
-                />
-            </div>
-            <div className="ml-4">
-                <div className="text-md font-large">{value}</div>
-                <div className="text-sm  text-blue-500">
-                    {row.original[column.emailAccessor]}
-                </div>
-            </div>
-        </div>
-    );
-};
+import dayjs from "dayjs";
 
 export const ActionButton = () => {
     return (
@@ -152,6 +63,8 @@ function Project({ columns, data }) {
     const setShowEventModal = useStore((state) => state.setShowEventModal);
     const showProjectModal = useStore((state) => state.showProjectModal);
     const setShowProjectModal = useStore((state) => state.setShowProjectModal);
+    const showTagModal = useStore((state) => state.showTagModal);
+    const setShowTagModal = useStore((state) => state.setShowTagModal);
     const updModal = useStore((state) => state.updModal);
     const setUpdModal = useStore((state) => state.setUpdModal);
     const getTimesheet = useStore((state) => state.getTimesheet);
@@ -165,7 +78,6 @@ function Project({ columns, data }) {
     
     
     const [dataSource, setDataSource] = useState([]);
-    // const [flagDelete, setFlagDelete] = useState(false);
     const [dataPJ, setDataPJ] = useState([]);
     const [editingRow, setEditingRow] = useState(null);
     const [getActivites, setGetActivities] = useState(null);
@@ -173,66 +85,8 @@ function Project({ columns, data }) {
 
 
     const [form] = Form.useForm();
-
-    // const {
-    //     getTableProps,
-    //     getTableBodyProps,
-    //     headerGroups,
-    //     rows,
-    //     prepareRow,
-
-    //     page,
-    //     canPreviousPage,
-    //     canNextPage,
-    //     pageOptions,
-    //     pageCount,
-    //     gotoPage,
-    //     nextPage,
-    //     previousPage,
-    //     setPageSize,
-
-    //     state, // new
-    //     preGlobalFilteredRows, // new
-    //     setGlobalFilter, // new
-    // } = useTable(
-    //     {
-    //         columns,
-    //         data,
-    //     },
-    //     useFilters, // new
-    //     useGlobalFilter,
-    //     useSortBy, //new
-    //     usePagination //new
-    // );
-
-    const hourFormat = (val) => {
-        return val > 1 ? `${val} hours` : `${val} hour`;
-    };
-
     
     const accessToken = localStorage.getItem("accessToken");
-
-    // const runTimesheet = async () => {
-
-    //     let res = await getTimesheet(accessToken);
-    //     if(res.success){
-    //          const data = [];
-    //          for (let j = 0; j < res.result.length; j++) {
-    //              let temp = res.result[j].activities;
-    //              data.push({
-    //                  key: `${j}`,
-    //                  name: `${res.result[j].project_title}`,
-    //                  taskTitle: `taskTitle ${j}`,
-    //                  day1: hourFormat(temp[0].activity_duration),
-    //                  day2: hourFormat(temp[1].activity_duration),
-    //                  day3: hourFormat(temp[2].activity_duration),
-    //                  day4: hourFormat(temp[3].activity_duration),
-    //                  day5: hourFormat(temp[4].activity_duration),
-    //              });
-    //          }
-    //          setDataSource(data);
-    //      }
-    // }
 
     const runProject = async () => {
 
@@ -240,7 +94,6 @@ function Project({ columns, data }) {
         if(resP.data.success){
             const dataPJ = [];
             let p = resP.data.result
-            console.log("all project ", p);
              for (let k = 0; k < p.length; k++) {
                 dataPJ.push({
                     key: k,
@@ -251,15 +104,11 @@ function Project({ columns, data }) {
                     end_date: p[k].end_date,
                     created_by_id: p[k].created_by_id,
                     created_by_name: p[k].created_by_name,
-                    department: p[k].department
-                //     "fk_company_id": 2,
-                // "fk_createdby_id": 4,
-                // "project_status": 0,
+                    department: p[k].department,
+                    tags: JSON.stringify(p[k].tags),
                 })
              }
              setDataPJ(dataPJ);
-             console.log("dataPJ", dataPJ)
-
          }
     }
 
@@ -275,48 +124,42 @@ function Project({ columns, data }) {
         showProjectModal, 
         flagDelete,
         updModal,
+        showTagModal,
     ]);
 
-        //  key: k,
-        //     project_id: p[k].project_id,
-        //     project_title: p[k].title,
-        //     project_description: p[k].description,
-        //     start_date: p[k].start_date,
-        //     end_date: p[k].end_date,
-        //     created_by_id: p[k].created_by_id,
-        //     created_by_name: p[k].created_by_name,
     const columnsProject = [
        
         {
             title: "Project ID",
             key: "project_id",
-            // fixed: "left",
+            fixed: "left",
             dataIndex: "project_id",
             // width: 30,
-            defaultSortOrder: 'descend',
             sorter: (a, b) => a.project_id - b.project_id,
             render: (text, record) => {
                 return <p>ID - {text}</p>;
             },
         }, 
+        Table.EXPAND_COLUMN,
         {
             title: "Project Title",
             dataIndex: "project_title",
             key: "project_title",
-            defaultSortOrder: 'descend',
+            // width: 100,
             sorter: (a, b) => a.project_title - b.project_title,
             // fixed: "left",
             render: (text, record) => {
                 return <p>{text}</p>;
             },
         },
+        // Table.SELECTION_COLUMN,
         {
             title: "Created By",
             key: "created_by_name",
             dataIndex: "created_by_name",
-            defaultSortOrder: 'descend',
             sorter: (a, b) => a.created_by_name - b.created_by_name,
             render: (text, record) => {
+                
                 return <p>{text}</p>;
                 
             },
@@ -325,14 +168,12 @@ function Project({ columns, data }) {
             title: "Department",
             key: "department",
             dataIndex: "department",
-            defaultSortOrder: 'descend',
             render: (text, record) => {
                 let obj = {}
                 for (let i = 0; i < text.length; i++) { obj = text[i] }
                 return <p>{obj.department_code}</p>;
             },
         }, 
-        Table.EXPAND_COLUMN,
         {
             title: "Description",
             dataIndex: "project_description",
@@ -341,7 +182,6 @@ function Project({ columns, data }) {
                 return <p>{text}</p>;
             },
         }, 
-        // Table.SELECTION_COLUMN,
         {
             title: "Start Date",
             dataIndex: "start_date",
@@ -403,19 +243,16 @@ function Project({ columns, data }) {
         },
     ]
 
-  
+    // const onFinish = (values) => {
+    //     const updatedDataSource = [...dataSource];
+    //     updatedDataSource.splice(editingRow, 1, { ...values, key: editingRow });
+    //     setDataSource(updatedDataSource);
+    //     setEditingRow(null);
+    // };
 
-    const onFinish2 = (values) => {
-        const updatedDataSource = [...dataSource];
-        updatedDataSource.splice(editingRow, 1, { ...values, key: editingRow });
-        setDataSource(updatedDataSource);
-        setEditingRow(null);
-    };
     return (
         <div className="flex flex-col p-10 mx-10 mt-20 mb-10 h-[88vh] justify-items-center bg-gradient-to-t from-green-400 to-transparent dark:from-green-900 rounded-3xl overflow-x-auto drop-shadow-2xl">
-            {showProjectModal && <ProjectEventModal />}
-            {updModal && <UpdateProjectModal resVal={resVal} />}
-            {/* <ProjectEventModal /> */}
+           
             <span className="font-bold text-3xl flex mb-4 text-green-500">Your Project</span>
 
             <div className="mb-4 grid grid-cols-3">
@@ -424,10 +261,6 @@ function Project({ columns, data }) {
                         onClick={() => {
                             getProject(accessToken)
                             setShowProjectModal(true);
-                            
-                            // setShowEventModal(true);
-                            // getTimesheet('contoh isian values');
-                            // createAWeek();
                         }}
                         className="flex items-baseline py-2 px-4   cursor-pointer bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
                     >
@@ -436,12 +269,11 @@ function Project({ columns, data }) {
                 </div>
             </div>
             <div className="mb-4 z-0 bg-stone-100 border-b-4 border-stone-400 rounded-2xl">
-                <Form form={form} onFinish={onFinish2} className="p-2 rounded-2xl">
+                <Form form={form} className="p-2 rounded-2xl">
                     <Table
                         bordered
                         columns={columnsProject}
                         dataSource={dataPJ}
-                        // scroll={{ x: 1000 }}
                         pagination={{
                             pageSize: 5,
                             total: dataPJ.length,
@@ -449,30 +281,34 @@ function Project({ columns, data }) {
                         }}
                         size={"middle"}
                         expandable={{
-                            // columnTitle: "-",
                             expandedRowRender: (record) => (
-                              <p
-                                style={{
-                                  margin: 20,
-                                }}
-                              >
-                                {record.project_description}
-                              </p>
+
+                                <ul style={{ margin: 5}}>
+                                { 
+                                    JSON.parse(record.tags) !== null ? (
+                                        JSON.parse(record.tags).map((val, i) => (
+                                            <li key={i} value={val}> {val.tag_name} </li>
+                                        ))
+                                    ) : ( <div> None </div> )
+                                }
+                                </ul>
                             ),
-                            // rowExpandable: (record) => record.project_title !== 'Not Expandable',
+                            columnTitle: "act.",
+                            columnWidth: 50,
+                            showExpandColumn: false,
                             expandIcon: ({ expanded, onExpand, record }) =>
-                              expanded ? (
+                                expanded ? (
                                 <MinusCircleTwoTone onClick={e => onExpand(record, e)} />
-                              ) : (
+                                ) : (
                                 <PlusCircleTwoTone onClick={e => onExpand(record, e)} />
-                              )
-                        }}
+                                )
+                            }}
                     />
-                
                 </Form>
             </div>
+            
+            {updModal && <UpdateProjectModal resVal={resVal} />}
             <Tag />
-
         </div>
     );
 }

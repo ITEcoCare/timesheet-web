@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Form, Formik, useFormik } from "formik";
+import { Form, Formik, useFormik, useFormikContext } from "formik";
 import {
     FaTag,
     FaPen,
@@ -24,62 +24,38 @@ const cityData = {
 };
 
 const TimesheetEventModal = () => {
+
+    const accessToken = localStorage.getItem("accessToken");
+    const formSpanClass = "inline-flex items-center px-3 text-sm rounded-l-lg bg-green-300 dark:bg-stone-800";
+
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
     const [listPJ, setListPJ] = useState([]);
     const [listTags, setListTags] = useState([]);
-    // const [selectedLabel, setSelectedLabel] = useState(labelsClasses[0]);
     const [cities, setCities] = useState(cityData[provinceData[0]]);
     const [secondCity, setSecondCity] = useState(cityData[provinceData[0]][0]);
+    // const [selectedLabel, setSelectedLabel] = useState(labelsClasses[0]);
 
-    const accessToken = localStorage.getItem("accessToken");
 
     //zustand
+    // const createProject = useStore((state) => state.createProject);
     const showEventModal = useStore((state) => state.showEventModal);
     const setShowEventModal = useStore((state) => state.setShowEventModal);
     const daySelected = useStore((state) => state.daySelected);
-    // const createProject = useStore((state) => state.createProject);
     const createTimesheet = useStore((state) => state.createTimesheet);
     const getProjectByUser = useStore((state) => state.getProjectByUser);
-    const getTags = useStore((state) => state.getTags);
+    const getTags = useStore((state) => state.getTags); 
+    const postData = useStore((state) => state.postData); 
 
-    // console.log("getProjectByUser>>", getProjectByUser)
-    
-
-    const formSpanClass =
-        "inline-flex items-center px-3 text-sm rounded-l-lg bg-green-300 dark:bg-stone-800";
-
-    // const [form] = Form.useForm();
-    // const onFinish = (values) => {
-    //   console.log(values);
-    // };
-    // const onReset = () => {
-    //   form.resetFields();
-    // };
-
-    // const {
-    //   register,
-    //   handleSubmit,
-    //   watch,
-    //   formState: { errors },
-    // } = useForm();
-    // const onSubmit = (data) => {
-    //   alert("masuk nih")
-    //   console.log('data==>', data);
-    // }
 
     const runProjectByUser = async () => {
         let resP = await getProjectByUser(accessToken);
-        let resT = await getTags(accessToken);
-        console.log("resT", resT)
+        // let resT = await getTags(accessToken);
         if(resP.success) {
             setListPJ(resP.result)
-            setListTags(resT.data.result.data)
         };
     }
-    
 
-    
  
     const formik = useFormik({
         initialValues: {
@@ -88,12 +64,25 @@ const TimesheetEventModal = () => {
             tag_id: "",
         },
         onSubmit: (values, actions) => {
-            createTimesheet(accessToken, values)
+            // alert(JSON.stringify(values, null, 2))
+            console.log("values ->", values)
+            // createTimesheet(accessToken, values)
             setShowEventModal(false);
         },
     });
-
     
+    const handleChangeProject = async (e)=> {
+        let params= {
+            "project_id": e.target.value
+        }
+        setListTags([]);
+        const res = await postData(accessToken, params)
+        if(res.success){
+            setListTags(res.result);
+        }
+    }
+
+
     const handleProvinceChange = (value) => {
         setCities(cityData[value]);
         setSecondCity(cityData[value][0]);
@@ -103,24 +92,15 @@ const TimesheetEventModal = () => {
         setSecondCity(value);
     };
 
-  
-    // console.log('watch', watch("example")); // watch input value by passing the name of it
-
     const labelClass = "flex items-baseline p-2";
-
-    // const handleSubmit =()=> {
-    //   console.log('masuk handle subujm')
-    // }
-
 
     useEffect(() => {
       runProjectByUser()
     }, [showEventModal])
-    
 
     return (
         <>
-            <div className=" mt-2 md:flex-row  flex flex-col fixed min-h-screen w-full z-20 bg-stone-800 bg-opacity-90 left-0 top-0 justify-center items-center">
+            <div className="md:flex-row  flex flex-col fixed min-h-screen w-full z-20 bg-stone-800 bg-opacity-90 left-0 top-0 justify-center items-center">
                 <div className=" bg-gray-100 w-[100vh] lg:w-[80vh] md:w-[60vh] sm:w-[40vh] h-full rounded-xl">
                     <header className="flex flex-wrap lg:flex-wrap-reverse md:flex-wrap sm:flex-wrap mb-4 z-30 py-2 px-4 text-center  bg-gray-200 rounded-t-xl justify-between items-center">
                         <div className="w-full flex justify-end px-2">
@@ -133,6 +113,7 @@ const TimesheetEventModal = () => {
                         </div>
                     </header>
                     <form onSubmit={formik.handleSubmit} className="p-6">
+                        {/* <FormObserver />     */}
                         <div className="m-2 grid grid-cols-1 sm:grid-cols-1">
 
                             <span className="font-extrabold text-2xl flex ml-4 text-green-500">Create timesheet! </span>
@@ -144,8 +125,8 @@ const TimesheetEventModal = () => {
                                 <input
                                     type="date"
                                     id="work_date"
+                                    name="work_date"
                                     placeholder="date..."
-                                    // defaultValue={now}
                                     onChange={formik.handleChange}
                                     value={formik.values.work_date}
                                     className={
@@ -165,12 +146,18 @@ const TimesheetEventModal = () => {
                                 </label>
                                 <select 
                                     id="project_id"
+                                    name="project_id"
                                     placeholder="Select project..."
-                                    onChange={formik.handleChange}
+                                    // onChange={formik.handleChange}
+                                    onChange={(e) => {
+                                        formik.setFieldValue("project_id", project_id)
+                                        formik.handleChange(e)
+                                        handleChangeProject(e)
+                                    }}
                                     value={formik.values.project_id}
                                     className={ "w-full fill-white dark:bg-stone-800 hover:bg-white-400  py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "}
                                 >
-                                    <option> Select project...</option>
+                                    <option >Select project...</option>
                                     {
                                         
                                         listPJ.map((val, i) => (
@@ -186,27 +173,20 @@ const TimesheetEventModal = () => {
                                 </label>
                                 <select 
                                     id="tag_id"
+                                    name="tag_id"
                                     placeholder="Activity..."
                                     onChange={formik.handleChange}
-                                    onSelect={(value, event) => this.handleOnChange(value, event)}
                                     value={formik.values.tag_id}
                                     className={ "w-full fill-white dark:bg-stone-800 hover:bg-white-400  py-2 px-4 border-b-4 dark:border-stone-900 border-gray-200 rounded-r-xl shadow-inner hover:bg-gray-100 "}
                                 >
-                                    <option> Select activity</option>
+                                    <option> Select activity...</option>
                                     { 
                                         listTags.map((val, i) => (
-                                            listTags.fk_project_id == listPJ.project_id 
-                                            ? <option value={val.tag_id}> {val.tag_id} - {val.tag_name} </option>
-                                            : <option value={val.tag_id}> Create an activity first </option>
+                                            <option value={val.tag_id}> {val.tag_id} - {val.tag_name} d</option>
+                                            // : <option value={val.tag_id}> Create an activity first </option>
                                         ))
                                     }
-                                    
                                 </select>
-                                {/* <Select onSelect={(value, event) => this.handleOnChange(value, event)}>
-
-                                        <Option value="1">text 1</Option>
-                                        <Option value="2">text 2</Option>
-                                </Select> */}
                             </label>
                             <label className={labelClass}>
                                 <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">

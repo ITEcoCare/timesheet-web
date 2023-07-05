@@ -20,7 +20,7 @@ const Navbar = () => {
 
     const accessToken = localStorage.getItem("accessToken");
     const myUser = JSON.parse(localStorage.getItem("account"));
-    const userData = JSON.parse(localStorage.getItem("account"));
+    // const userData = JSON.parse(localStorage.getItem("account"));
 
     // console.log(userInfo);
 
@@ -79,48 +79,22 @@ const Navbar = () => {
         {
             label: (
                 <div 
-                    className="px-4 py-3 text-sm text-gray-900 dark:text-white  dark:bg-stone-700"
+                    className="px-4 py-3 text-base font-medium text-gray-900 dark:text-white  dark:bg-stone-700"
                     onClick={()=> { setShowProfileModal(true) }}
                 >
-                    <div>Bonnie Green</div>
-                    <div className="font-medium truncate">
-                        name@flowbite.com
-                    </div>
+                    Profile
                 </div>
             ),
             key: "0",
         },
         {
             label: (
-                <ul
-                    className="py-2 text-sm text-gray-700 dark:text-gray-200 dark:bg-stone-700"
-                    aria-labelledby="avatarButton"
-                >
-                    <li>
-                        <a
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                            Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                            Settings
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                        >
-                            Earnings
-                        </a>
-                    </li>
-                </ul>
+                <div 
+                className="px-4 py-3 text-base font-medium text-gray-900 dark:text-white  dark:bg-stone-700"
+                // onClick={()=> { setShowProfileModal(true) }}
+            >
+                Settings
+            </div>
             ),
             key: "1",
         },
@@ -183,7 +157,7 @@ const Navbar = () => {
                             </Link>
                         </div>
                         <div>
-                            { userData.employee_lead && <Link
+                            { myUser.employee_lead && <Link
                                 className={navChild}
                                 to={"/my-approval"}
                             >
@@ -243,7 +217,7 @@ const Navbar = () => {
                                 src={ava}
                                 alt="User dropdown"
                             />
-                            <div className="font-medium text-left dark:text-white">
+                            <div className="text-base font-medium text-left dark:text-white">
                                 <div>
                                     {
                                         myUser.employee_fullname

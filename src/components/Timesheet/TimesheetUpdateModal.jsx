@@ -65,6 +65,7 @@ const TimesheetUpdateModal = ({resVal}) => {
   });
 
   const updateSelectedTS = (values) => {
+    console.log("resval", resVal)
     let updVal = {
         timesheet_id: resVal.timesheet_id,
         work_date: values.work_date,
@@ -72,6 +73,7 @@ const TimesheetUpdateModal = ({resVal}) => {
         tag_id: values.tag_id,
         duration: values.duration,
         description: values.description,
+        timesheet_status: resVal.timesheet_status,
     }
     updateTimesheet(accessToken, updVal);
     setUpdTSModal(false);

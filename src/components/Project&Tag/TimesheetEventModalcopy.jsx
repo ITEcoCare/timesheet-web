@@ -72,14 +72,14 @@ const TimesheetEventModal = () => {
   const labelClass = "flex items-baseline p-2";
 
   useEffect(() => {
-    console.log("createProject dri dpean", createProject)
+    // console.log("createProject dri dpean", createProject)
   
   }, [showProjectModal])
   
 
   return (
     <>
-      <div className="h-screen w-full z-10 bg-stone-800 bg-opacity-90 fixed left-0 top-0 flex justify-center items-center">
+      <div className="h-screen w-full z-20 bg-stone-800 bg-opacity-90 fixed left-0 top-0 flex justify-center items-center">
         <form className="bg-white rounded-xl shadow-2xl w-2/4 " onSubmit={formik.handleSubmit}>
           <header className="flex flex-wrap lg:flex-wrap-reverse md:flex-wrap sm:flex-wrap mb-4 z-30 py-2 px-4 text-center  bg-gray-200 rounded-t-xl justify-between items-center">
               <div className="w-full flex justify-end px-2">
@@ -92,7 +92,7 @@ const TimesheetEventModal = () => {
               </div>
           </header>
           <div className=" p-3">
-            <span className="font-bold text-xl flex ml-4 text-green-500">Create A Project</span>
+            <span className="font-extrabold text-xl flex ml-4 text-green-500">Create A Project</span>
             <div className={labelClass}>
               <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">Title</label>
           

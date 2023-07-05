@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import { ordersData, contextMenuItems, ordersGrid } from "../../data/dummy";
-import TimesheetTable, { SelectColumnFilter, AvatarCell } from "./TimesheetTable";
+import TimesheetTable from "./TimesheetTable";
+// import TimesheetTable, { SelectColumnFilter, AvatarCell } from "./TimesheetTable";
 import Project from "../Project&Tag/Project";
 import { getData } from "../../store/dummy";
 import TimesheetEventModal from "./TimesheetEventModal";
@@ -21,40 +22,40 @@ const Timesheet = () => {
 
   const editing = { allowDeleting: true, allowEditing: true };
   const isStaff = true;
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Name",
-        accessor: "name",
-        Cell: AvatarCell,
-        imgAccessor: "imgUrl",
-        emailAccessor: "email",
-      },
-      {
-        Header: "Age",
-        accessor: "age",
-      },
-      {
-        Header: "Title",
-        accessor: "title",
-      },
-      {
-        Header: "Status",
-        accessor: "status",
-      },
-      {
-        Header: "Role",
-        accessor: "role",
-        Filter: SelectColumnFilter, // new
-        filter: "includes", // new
-      },
-      {
-        Header: "Action",
-        accessor: "action"
-      },
-    ],
-    []
-  );
+  // const columns = React.useMemo(
+  //   () => [
+  //     {
+  //       Header: "Name",
+  //       accessor: "name",
+  //       Cell: AvatarCell,
+  //       imgAccessor: "imgUrl",
+  //       emailAccessor: "email",
+  //     },
+  //     {
+  //       Header: "Age",
+  //       accessor: "age",
+  //     },
+  //     {
+  //       Header: "Title",
+  //       accessor: "title",
+  //     },
+  //     {
+  //       Header: "Status",
+  //       accessor: "status",
+  //     },
+  //     {
+  //       Header: "Role",
+  //       accessor: "role",
+  //       Filter: SelectColumnFilter, // new
+  //       filter: "includes", // new
+  //     },
+  //     {
+  //       Header: "Action",
+  //       accessor: "action"
+  //     },
+  //   ],
+  //   []
+  // );
 
   const data = React.useMemo(() => getData(), []);
 
@@ -63,7 +64,8 @@ const Timesheet = () => {
       <span className="font-bold text-3xl flex mb-4 text-green-500">Timesheet!</span>
       {/* <Tempo /> */}
       {/* <Project columns={columns} data={data} /> */}
-      <TimesheetTable columns={columns} data={data} />
+      <TimesheetTable  />
+      {/* <TimesheetTable columns={columns} data={data} /> */}
       {/* {showEventModal && <TimesheetEventModal />} */}
       {/* {showProjectModal && <ProjectEventModal />} */}
       

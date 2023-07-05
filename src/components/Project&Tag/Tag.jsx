@@ -1,27 +1,12 @@
 import "regenerator-runtime/runtime";
 import React, { useEffect, useState } from "react";
 import ProjectEventModal from "./TimesheetEventModalcopy";
-import {
-    FaAngleRight,
-    FaAngleLeft,
-    FaAngleDoubleLeft,
-    FaAngleDoubleRight,
-    FaTag,
-    FaPen,
-    FaTrash,
-    FaCheck,
-    FaTimes,
-} from "react-icons/fa";
 import { useStore } from "../../store/zustand";
 
 import {
-    Button,
-    Switch,
     Table,
     Form,
     Input,
-    InputNumber,
-    Pagination,
 } from "antd";
 
 function Tag({ columns, data }) {
@@ -31,6 +16,8 @@ function Tag({ columns, data }) {
     const setShowEventModal = useStore((state) => state.setShowEventModal);
     const showProjectModal = useStore((state) => state.showProjectModal);
     const setShowProjectModal = useStore((state) => state.setShowProjectModal);
+    const showTagModal = useStore((state) => state.showTagModal);
+    const setShowTagModal = useStore((state) => state.setShowTagModal);
     const getProject = useStore((state) => state.getProject); 
     const getProjectAllUser = useStore((state) => state.getProjectAllUser); 
     const getTags = useStore((state) => state.getTags);
@@ -39,17 +26,15 @@ function Tag({ columns, data }) {
     const flagDelete = useStore((state) => state.flagDelete);
     
     //useStates
+    const [newArray, setNewArray] = useState("");
     const [dataSource, setDataSource] = useState([]);
     const [dataPJ, setDataPJ] = useState([]);
+    const [dataTg, setDataTg] = useState([]);
     const [editingRow, setEditingRow] = useState(null);
     const [getActivites, setGetActivities] = useState(null);
     const [form] = Form.useForm();
     const currTimesheet = useStore((state) => state.currTimesheet);
 
-    const hourFormat = (val) => {
-        return val > 1 ? `${val} hours` : `${val} hour`;
-    };
-    
     const accessToken = localStorage.getItem("accessToken");
 
     const runTags = async () => {
@@ -57,42 +42,33 @@ function Tag({ columns, data }) {
         let resP = await getTags(accessToken);
         let getP = await getProjectAllUser(accessToken);
         
-        let objProject = {};
+        let isi = getP.data.result.data
         if(resP.data.success || getP.data.success){
-            
-            let isi = getP.data.result.data
-            for (let l = 0; l < isi.length; l++) {
-                objProject = {
-                    project_id: isi[l].project_id,
-                    project_title: isi[l].project_title,
-                }
-            }
-            
-            const dataPJ = [];
+            let tags = [];
             let p = resP.data.result.data
             for (let k = 0; k < p.length; k++) {
-                dataPJ.push({
+                tags.push({
                     key: k,
                     tag_id: p[k].tag_id,
                     tag_name: p[k].tag_name,
                     tag_slug: p[k].tag_slug,
-                    fk_project_id: objProject.project_id == p[k].fk_project_id 
-                        ? objProject.project_title 
-                        : "nulll",
+                    fk_project_id: p[k].fk_project_id,
                     fk_company_id: p[k].fk_company_id,
                     created_at: p[k].created_at,
                 })
+                setDataTg(tags);
             }
-            setDataPJ(dataPJ);
+            setDataPJ(isi)
         }
-
+        
     }
 
     useEffect(() => {
         runTags();
     }, [
         // showProjectModal, 
-        flagDelete
+        flagDelete,
+        showTagModal,
     ]);
 
 
@@ -102,66 +78,32 @@ function Tag({ columns, data }) {
             key: "tag_id",
             fixed: "left",
             dataIndex: "tag_id",
-            defaultSortOrder: 'descend',
             sorter: (a, b) => a.tag_id - b.tag_id,
             render: (text, record) => {
-                if (editingRow === record.key) {
-                    return (
-                        <Form.Item
-                            name="name" //crucial for value
-                            className="m-0"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please enter the project name.",
-                                },
-                            ]}
-                        >
-                            <Input className={ " placeholder:text-stone-400 dark:text-stone-50 fill-white dark:bg-stone-800 hover:bg-white-400 font-bold border-b-4 dark:border-stone-900 border-gray-200 rounded-xl shadow-inner hover:bg-gray-100 "}/>
-                        </Form.Item>
-                    );
-                } else {
-                    return <p>{text}</p>;
-                }
+                return <p>{text}</p>;
             },
         }, 
         {
-            title: "Activity name",
+            title: "Activity namee",
             dataIndex: "tag_name",
             key: "tag_name",
-            // fixed: "left",
+            sorter: (a, b) => (a.tag_name > b.tag_name ? -1 : 1),
             render: (text, record) => {
-                if (editingRow === record.key) {
-                    return (
-                        <Form.Item
-                            name="name" //crucial for value
-                            className="m-0"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please enter the project name.",
-                                },
-                            ]}
-                        >
-                            <Input
-                                className={
-                                    " placeholder:text-stone-400 dark:text-stone-50 fill-white dark:bg-stone-800 hover:bg-white-400 font-bold border-b-4 dark:border-stone-900 border-gray-200 rounded-xl shadow-inner hover:bg-gray-100 "
-                                }
-                            />
-                        </Form.Item>
-                    );
-                } else {
-                    return <p>{text}</p>;
-                }
+                return <p>{text}</p>;
             },
         },
         {
             title: "Project Related",
             dataIndex: "fk_project_id",
             key: "fk_project_id",
-            // fixed: "left",
             render: (text, record) => {
-                return <p>{text}</p>;
+                let res = null
+                for (let i = 0; i < dataPJ.length; i++) {
+                    if (text == dataPJ[i].project_id) {
+                        res = dataPJ[i].project_title
+                    }
+                }
+                return res
             },
         },         
         {
@@ -219,21 +161,40 @@ function Tag({ columns, data }) {
     };
 
     return (
-        <div className="mb-4 z-0 bg-stone-100 border-b-4 border-stone-400 rounded-2xl">
-            <Form form={form} onFinish={onFinish2} className="p-2 rounded-2xl">
-                <Table
-                    bordered
-                    columns={columnsTags}
-                    dataSource={dataPJ}
-                    // scroll={{ x: 1500 }}
-                    pagination={{
-                        pageSize: 5,
-                        total: dataPJ.length,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
-                    }}
-                />
-            
-            </Form>
+        <div>
+            <div className="mb-4 grid grid-cols-3">
+                <div className="col-start-1">
+                    <button
+                        onClick={() => {
+                            // getProject(accessToken)
+                            setShowTagModal(true);
+                            
+                            // setShowEventModal(true);
+                            // getTimesheet('contoh isian values');
+                            // createAWeek();
+                        }}
+                        className="flex items-baseline py-2 px-4   cursor-pointer bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
+                    >
+                        Add Activity
+                    </button>
+                </div>
+            </div>
+
+            <div className="mb-4 z-0 bg-stone-100 border-b-4 border-stone-400 rounded-2xl">
+                <Form form={form} onFinish={onFinish2} className="p-2 rounded-2xl">
+                    <Table
+                        bordered
+                        columns={columnsTags}
+                        dataSource={dataTg}
+                        pagination={{
+                            pageSize: 5,
+                            total: dataTg.length,
+                            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items`,
+                        }}
+                    />
+                
+                </Form>
+            </div>
         </div>
     );
 }

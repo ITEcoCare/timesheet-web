@@ -124,6 +124,9 @@ export const useStore = create((set) => ({
                             employee_department_code: rd.account.employee_department_code,
                             employee_job_title_name: rd.account.employee_job_title_name || 'Developer',
                             access_token: rd.meta.access_token,
+                            employee_job_type_code: rd.account.employee_job_type_code || '-', 
+                            employee_job_type_name: rd.account.employee_job_type_name || '-', 
+                            employee_join_date: rd.account.employee_join_date || '-',
                         },
                     });
                     toast(`Selamat! Anda berhasil login ✨`, {
@@ -373,7 +376,75 @@ export const useStore = create((set) => ({
             
             return rc.data;
         } catch (error) {
-            console.log(error);
+            if (val.timesheet_status != 0 ) {
+                toast(`Anda hanya dapat merubah isi timesheet saat masih berstatus Draft.`, {
+                    type: "error",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+            }
+
+        }
+    },
+    deleteTimesheet: async (token, val)=> {
+        try {
+            const rc = await axios.post(`${url2}timesheet/delete`,
+                {
+                    timesheet_id: val.timesheet_id,
+                    project_id: val.project_id,
+                    tag_id: val.tag_id,
+                    duration: val.duration,
+                    work_date: val.work_date,
+                    description: val.description,
+                },
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            
+            toast(`Timesheet berhasil ter-update.`, {
+                autoClose: 1500,
+                type: "success",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                    width: "100%",
+                    'borderRadius':'15px',
+                    'marginBottom': '40px',
+                },
+            })
+            
+            return rc.data;
+        } catch (error) {
+            if (val.timesheet_status != 0 ) {
+                toast(`Anda hanya dapat merubah isi timesheet saat masih berstatus Draft.`, {
+                    type: "error",
+                    theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                    closeButton: false,
+                    position: 'bottom-center',
+                    hideProgressBar: false,
+                    className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                    style: {
+                      width: "100%",
+                      'borderRadius':'15px',
+                      'marginBottom': '40px',
+                    },
+                })
+                console.log(error)
+            }
+
         }
     },
     createAWeek: (values) => {
@@ -751,9 +822,7 @@ export const useStore = create((set) => ({
             const rez = await axios.get(`${url2}project/read`, { 
                 headers: { Authorization: `bearer ${token}`},
             })
-            console.log("rez", rez)
             return rez
-            // return Promise.resolve(rez)
 
         } catch (error) {
             console.log(error);
@@ -844,6 +913,7 @@ export const useStore = create((set) => ({
                     headers: { Authorization: `bearer ${token}`},
                 }
             )
+
             
             toast(`Project selesai ter-update.`, {
                 type: "success",
@@ -861,6 +931,7 @@ export const useStore = create((set) => ({
             return rc.data;
         } catch (error) {
             console.log(error);
+
         }
     },
 
@@ -893,6 +964,37 @@ export const useStore = create((set) => ({
             })
             // console.log("isi get tags", res)
             return Promise.resolve(res)
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    createTag: async (token, val)=> {
+        try {
+            const rc = await axios.post(`${url2}project/tag/create`,
+                {
+                    company_id: val.company_id,
+                    project_id: val.project_id,
+                    name: val.name,
+                }, 
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            
+            toast(`Activity baru telah dibuat 👍`, {
+                type: "success",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                  width: "100%",
+                  'borderRadius':'15px',
+                  'marginBottom': '40px',
+                },
+              })
+            return rc.data;
         } catch (error) {
             console.log(error);
         }
@@ -952,6 +1054,8 @@ export const useStore = create((set) => ({
     setShowProjectModal: (val) => { set({ showProjectModal: val }) },
     updModal: false,
     setUpdModal: (val) => { set({ updModal: val }) },
+    showTagModal: false,
+    setShowTagModal: (val) => { set({ showTagModal: val }) },
 
     savedEvents: null,
     dispatchCalEvent: null,
@@ -959,4 +1063,17 @@ export const useStore = create((set) => ({
     filteredEvents: [],
     selectedEvent: null,
     setSelectedEvent: () => {},
+    postData : async (token, params = null) => {
+        console.log("params", token, params)
+        try {
+
+            const res = await axios.post(`${url2}project/tag/fetch-all`, params, { 
+                headers: { Authorization: `bearer ${token}`},
+            }            )
+            // console.log("isi get tags", res)
+            return Promise.resolve(res.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }));

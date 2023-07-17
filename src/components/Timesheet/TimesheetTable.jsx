@@ -57,6 +57,7 @@ const now = dayjs().format('YYYY-MM-DD');
 const TableTimesheet = ({ columns, data }) => {
 
     //zustand
+    const userInfo = useStore((state) => state.userInfo);
     const showEventModal = useStore((state) => state.showEventModal);
     const setShowEventModal = useStore((state) => state.setShowEventModal);
     const showProjectModal = useStore((state) => state.showProjectModal);
@@ -197,7 +198,10 @@ const TableTimesheet = ({ columns, data }) => {
     }
 
     const runDelete =(token, record)=> {
-        console.log("record dari delete", record)
+        
+        // console.log("userInfo TS", userInfo)
+
+
         // setUpdTSModal(true);
 
     }
@@ -410,6 +414,9 @@ const TableTimesheet = ({ columns, data }) => {
     useEffect(() => {
         runProject();
         runTimesheet(accessToken)
+        console.log("userInfo TS length", userInfo.hasOwnProperty.length)
+        // if (userInfo.hasOwnProperty.length == 1) console.log("userInfo TS masuk", userInfo)
+
     }, [
         showEventModal, 
         showProjectModal, 

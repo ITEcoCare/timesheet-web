@@ -166,7 +166,7 @@ const Intro = () => {
             </form>
 
             <div className="flex flex-wrap  mx-auto max-w-screen-xl lg:py-16">
-                <div className="w-full mx-2 bg-blue-500 dark:bg-stone-800 border-2 border-blue-700 border-b-4 dark:border-stone-700 rounded-lg md:p-12 mb-8">
+                <div className="w-full mx-2 bg-blue-500 dark:bg-stone-800 dark:border-green-700 border-2 border-blue-700 border-b-4 rounded-lg md:p-12 mb-8">
                     <h1 className="text-stone-100 dark:text-white text-3xl md:text-5xl font-extrabold mb-2">
                         Kabar Terbaru
                     </h1>
@@ -213,7 +213,7 @@ const Intro = () => {
                 </div>
                 <div className="flex flex-wrap w-full mx-2">
                     <div className="xl:w-1/2 md:w-1/2 sm:w-full">
-                        <div className="mr-4 p-4 bg-green-200 border-2 dark:bg-stone-800 border-b-4 border-green-600 dark:border-b-stone-700 rounded-xl ">
+                        <div className="mr-4 p-4 bg-green-200 border-2 dark:bg-stone-800 border-b-4 border-green-600 dark:border-b-green-700 rounded-xl ">
                             <a
                                 href="#"
                                 className="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-stone-700 dark:text-green-400 mb-2"
@@ -267,7 +267,7 @@ const Intro = () => {
                         </div>
                     </div>
                     <div className="xl:w-1/2 md:w-1/2 sm:w-full ">
-                        <div className="ml-4 p-4 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg">
+                        <div className="ml-4  p-4 bg-green-200 border-2 dark:bg-stone-800 border-b-4 border-green-600 dark:border-b-green-700 rounded-xl ">
                             <a
                                 href="#"
                                 className="bg-purple-100 text-purple-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-stone-700 dark:text-purple-400 mb-2"

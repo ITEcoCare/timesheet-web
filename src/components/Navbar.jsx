@@ -165,14 +165,14 @@ const Navbar = () => {
                             </Link> 
                             }
                         </div>
-                        {/* <div>
+                        <div>
                             <Link
                                 className={navChild}
                                 to={"/calendar"}
                             >
                                 Calendar
                             </Link>
-                        </div> */}
+                        </div>
                         <div>
                             <Link
                                 className={navChild}
@@ -181,14 +181,14 @@ const Navbar = () => {
                                 Employee
                             </Link>
                         </div>
-                        {/* <div>
+                        <div>
                             <Link
                                 className={navChild}
                                 to={"/tempo"}
                             >
                                 Tempo
                             </Link>
-                        </div> */}
+                        </div>
                     </>
                 )}
             </div>
@@ -196,11 +196,21 @@ const Navbar = () => {
                 <button
                     type="button"
                     onClick={handleThemeSwitch}
-                    className="rounded-lg bg-gray-500 p-2 dark:bg-green-500"
+                    className="rounded-xl bg-stone-500 border-b-4 border-b-stone-700 dark:border-b-stone-500 p-2 dark:bg-green-500"
                 >
                     {theme === "dark" ? sun : moon}
                 </button>
                 {initialState._isLoggedIn && (
+                <>
+                    <img
+                        id="avatarButton"
+                        type="button"
+                        data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        className="w-10 h-11 rounded-xl cursor-pointer bg-stone-100 border-b-4 border-b-green-600 dark:border-b-green-500"
+                        src={ava}
+                        alt="User dropdown"
+                    />
                     <Dropdown
                         className="cursor-pointer"
                         menu={{ items }}
@@ -208,15 +218,6 @@ const Navbar = () => {
                         onClick={(e) => e.preventDefault()}
                     >
                         <Space>
-                            <img
-                                id="avatarButton"
-                                type="button"
-                                data-dropdown-toggle="userDropdown"
-                                data-dropdown-placement="bottom-start"
-                                className="w-10 h-10 rounded-lg cursor-pointer"
-                                src={ava}
-                                alt="User dropdown"
-                            />
                             <div className="text-base font-medium text-left dark:text-white">
                                 <div>
                                     {
@@ -240,6 +241,8 @@ const Navbar = () => {
                             <DownOutlined />
                         </Space>
                     </Dropdown>
+
+                </>
                 )}
             </div>
         </div>

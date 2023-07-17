@@ -50,7 +50,7 @@ const savedEventsReducer = (state, { type, payload }) => {
 };
 
 const toastContent = {
-    duration: 4000,
+    duration: 2000,
     position: "bottom-center",
     style: {
         color: "#000000",
@@ -164,7 +164,7 @@ export const useStore = create((set) => ({
             toast.error("User timeout!", toastContent);
             setTimeout(function(){
                 window.location.href = "/signin";
-            }, 5000);
+            }, 3000);
         } else {
             console.log("masuk bawah")
             try {
@@ -194,7 +194,7 @@ export const useStore = create((set) => ({
             } catch (error) {
                 console.log("masuk error logout", error);
                 localStorage.clear();
-                setTimeout(function(){ window.location.href = "/signin"; }, 2000);
+                setTimeout(function(){ window.location.href = "/signin"; }, 3000);
 
             }
         }

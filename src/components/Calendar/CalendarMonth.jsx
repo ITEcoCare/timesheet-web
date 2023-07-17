@@ -9,17 +9,20 @@ const CalendarMonth = ({ month }) => {
     // console.log('ini month di ==>', month)
 
     return (
-        <div className="flex-1 grid grid-cols-7 grid-rows-5">
+        <div className=" grid grid-cols-7 w-full ">
+        {/* <div className="grid grid-cols-7"> */}
+            {/* <div >Hello</div> */}
             {month.map((row, i) => (
-                <React.Fragment key={i}>
+                <React.Fragment key={i} >
                     {row.map((day, idx) => (
-                        <React.Fragment key={idx}>
-
-                            {row && <CalendarDay day={day} key={idx} rowIdx={i} />}
+                        
+                            <React.Fragment key={idx} >
+                            {row && <CalendarDay day={day} key={idx} rowIdx={i}  />}
                             {/* {console.log("day", day)}
                             {console.log("idx", idx)}
                             {console.log("i", i)} */}
-                        </React.Fragment>
+                            </React.Fragment>
+                        
                     ))}
                 </React.Fragment>
             ))}

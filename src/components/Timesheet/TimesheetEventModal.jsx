@@ -66,7 +66,7 @@ const TimesheetEventModal = () => {
         onSubmit: (values, actions) => {
             // alert(JSON.stringify(values, null, 2))
             console.log("values ->", values)
-            // createTimesheet(accessToken, values)
+            createTimesheet(accessToken, values)
             setShowEventModal(false);
         },
     });
@@ -182,7 +182,7 @@ const TimesheetEventModal = () => {
                                     <option> Select activity...</option>
                                     { 
                                         listTags.map((val, i) => (
-                                            <option value={val.tag_id}> {val.tag_id} - {val.tag_name} d</option>
+                                            <option value={val.tag_id}> {val.tag_id} - {val.tag_name}</option>
                                             // : <option value={val.tag_id}> Create an activity first </option>
                                         ))
                                     }

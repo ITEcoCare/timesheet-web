@@ -66,7 +66,7 @@ const CalendarHeader = () => {
       </h2>
 
 
-      <button
+      {/* <button
         // onClick={handlePrevWeek}
         className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-l-xl hover:shadow-inner "
       >
@@ -80,7 +80,7 @@ const CalendarHeader = () => {
       </button>
       <h2 className="ml-4 text-3xl font-bold text-stone-500 dark:text-stone-300">
         {dayjs(new Date(dayjs().year(), monthIndex)).format("MM MMMM")}
-      </h2>
+      </h2> */}
     </header>
   );
 };

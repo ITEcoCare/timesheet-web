@@ -11,6 +11,9 @@
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
     "@craco/craco": "^7.0.0",
+    "@fullcalendar/core": "^6.1.8",
+    "@fullcalendar/daygrid": "^6.1.8",
+    "@fullcalendar/react": "^6.1.8",
     "@heroicons/react": "^2.0.16",
     "@syncfusion/ej2": "^20.2.50",
     "@syncfusion/ej2-react-calendars": "^19.4.48",

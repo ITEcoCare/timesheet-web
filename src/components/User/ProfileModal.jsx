@@ -12,11 +12,36 @@ import { useStore } from "../../store/zustand";
 import Tempo from "../Tempo";
 import dayjs from "dayjs";
 import { useForm } from "react-hook-form";
-import { Button, Input, Select, DatePicker } from "antd";
+import { Button, Input, Select, DatePicker, Collapse } from "antd";
 import ava from "../../assets/cak_lontong02.jpeg";
 
 // const myUser = JSON.parse(localStorage.getItem("account"));
 // console.log(" myUser.module_access",  myUser.module_access)
+
+const text = `
+  A dog is a type of domesticated animal.
+  Known for its loyalty and faithfulness,
+  it can be found as a welcome guest in many households across the world.
+`;
+
+
+// export const items = [
+//     {
+//       key: '1',
+//       label: 'This is panel header 1',
+//       children: <p>{text}</p>,
+//     },
+//     {
+//       key: '2',
+//       label: 'This is panel header 2',
+//       children: <p>{text}</p>,
+//     },
+//     {
+//       key: '3',
+//       label: 'This is panel header 3',
+//       children: <p>{text}</p>,
+//     },
+// ];
 
 
 function ProfileModal() {
@@ -25,12 +50,52 @@ function ProfileModal() {
     const showProfileModal = useStore((state) => state.showProfileModal);
     const setShowProfileModal = useStore((state) => state.setShowProfileModal);
     const userInfo = useStore((state) => state.userInfo);
-    console.log(" userInfo",  userInfo)
+
+    const [items, setItems] = useState(null)
+    
+    
+    const getUserInfo =() => {    
+       
+        if (userInfo) {
+            console.log("userInfo >>> ", userInfo)
+    
+            let arrObj = []
+            let obj = {}
+            for (let i = 0; i < userInfo.module_access.length; i++) {
+                obj = {
+                    key: i,
+                    label: userInfo.module_access[i].module_app_name,
+                    children: <div className="flex flex-wrap">
+                        {
+                            userInfo.module_access[i].permission.map((key, j)=> (
+                                <div className=" m-0.5 w-fit bg-green-100 text-green-800 text-xs border-green-600 border-1 font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                                {key}</div>
+                            ))
+                        }
+                    </div>
+                }
+                arrObj.push(obj)
+                setItems(arrObj)
+            }
+            
+        } else {
+            alert("userINfo tidak dtiermukan")
+        }
+
+    }
+    
+    useEffect(()=>{
+        getUserInfo()
+    }, [])
+
+    const onChangeAccordion = (key) => {
+        // console.log(key);
+    };
 
 
   return (
     <div className=" md:flex-row  flex flex-col fixed min-h-screen w-full z-20 bg-stone-800 bg-opacity-90 left-0 top-0 justify-center items-center">
-                <div className=" bg-gray-100 w-[100vh] lg:w-[80vh] md:w-[60vh] sm:w-[40vh] h-full rounded-xl">
+                <div className=" bg-gray-100 w-[100vh] lg:w-[80vh] md:w-[60vh] sm:w-[40vh] rounded-xl">
                     <header className="flex flex-wrap lg:flex-wrap-reverse md:flex-wrap sm:flex-wrap z-30 py-2 px-4 text-center  bg-gray-200 rounded-t-xl justify-between items-center">
                         <div className="w-full flex justify-end px-2">
                             <button
@@ -42,7 +107,7 @@ function ProfileModal() {
                         </div>
                     </header>
 
-                    <div className="w-full shadow dark:bg-stone-800 rounded-b-xl">
+                    <div className="w-full h-[600px] overflow-y-auto shadow dark:bg-stone-800 rounded-b-xl">
                         <div className="flex justify-end px-4 pt-4">
                             <button id="dropdownButton" data-dropdown-toggle="dropdown" className="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
                                 <span className="sr-only">Open dropdown</span>
@@ -119,29 +184,24 @@ function ProfileModal() {
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Last Login</dt>
                                             <dd className="text-base font-semibold">{userInfo.user_last_login_at}</dd>
                                         </div>
-                                        <div className="flex flex-col py-3">
-                                            <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Module Access</dt>
-                                                <div className="flex flex-wrap w-20">
-                                                    { 
-                                                        userInfo.module_access.map((key, i) => (
-                                                            <div className=" m-0.5 w-fit bg-green-100 text-green-800 text-xs border-green-600 border-1 font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                                                                {key.module_app_name}</div>
-                                                        ))
-                                                    }
-                                                </div>
-                                            {/* <dd className="text-base font-semibold">{userInfo.employee_job_type_code} - {userInfo.employee_job_type_name}</dd> */}
-                                        </div>
-                                       
                                     </dl>
                                 </div>
                             </div>
 
+                            <div className="flex w-full flex-wrap text-left items-center px-9">
+                                <div className=" w-full col-span-start m-3">
+                                        <div className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Module Access</div>
+                                    <Collapse items={items} defaultActiveKey={['1']} onChange={onChangeAccordion()} />
+                                </div>
+                            </div>
 
                             <div className="flex mt-4 space-x-3 md:mt-6">
-                                <a href="#" className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Change Password</a>
-                                <a href="#" className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Message</a>
+                                <a href="#" className="inline-flex items-center px-4 py-2 text-sm font-extrabold text-center text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border-blue-700 border-b-4 ">Change Password</a>
+                                <a href="#" className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Go to settings</a>
                             </div>
                         </div>
+                        
+
                     </div>
 
                     

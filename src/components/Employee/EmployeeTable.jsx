@@ -186,7 +186,7 @@ const EmployeeTable = ({ columns, data }) => {
     return (
         <>
             <div className="mb-4 grid grid-cols-3">
-                <div className="col-span-2 sm:col-span-1 ">
+                <div className=" col-start-1 sm:col-start-1 ">
                     <button
                         onClick={() => { setShowEventModal(true) }}
                         className="flex items-baseline py-2 px-4   cursor-pointer bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
@@ -329,7 +329,7 @@ const EmployeeTable = ({ columns, data }) => {
 
                 <div className="items-center justify-center hidden col-span-1 space-x-2 sm:flex"></div>
 
-                <label className="flex items-baseline justify-end col-span-1">
+                <label className="flex items-baseline justify-end col-span-3">
                     <label className="bg-blue-500 text-white font-bold py-2 px-4 border-b-4 border-blue-700 rounded-l-xl">
                         <span className="">
                             {" "}

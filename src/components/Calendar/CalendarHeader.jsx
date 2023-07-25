@@ -40,26 +40,26 @@ const CalendarHeader = () => {
   }
 
   return (
-    <header className="px-4 py-2 flex items-center">
-      <img src={logo} alt="calendar" className="mr-2 w-12 h-12" />
+    <header className="px-2 py-2 flex items-center font-extrabold mb-4 border-b-1 border-stone-200">
+      <img src={logo} alt="calendar" className="mr-2 w-8 h-8" />
       <div className="mr-10 text-3xl font-extrabold">Calendar</div>
       <button
         onClick={handleReset}
-        className="mx-2 m-2 bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded-xl hover:shadow-inner "
+        className=" bg-yellow-500 hover:bg-yellow-400 text-white text-sm font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded-xl hover:shadow-inner "
       >
         <span>Today</span>
       </button>
       <button
         onClick={handlePrevMonth}
-        className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-l-xl hover:shadow-inner "
+        className="ml-4 bg-blue-500 hover:bg-blue-400 text-white text-sm font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-l-xl hover:shadow-inner "
       >
-        <FaAngleLeft className="w-6 h-6" color="white" />
+        <FaAngleLeft className="w-5 h-5" color="white" />
       </button>
       <button
         onClick={handleNextMonth}
-        className="fill-white text-white bg-blue-500 hover:bg-blue-400 font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-r-xl hover:shadow-inner "
+        className="fill-white text-white bg-blue-500 hover:bg-blue-400 text-sm font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-r-xl hover:shadow-inner "
       >
-        <FaAngleRight className="w-6 h-6" color="white" />
+        <FaAngleRight className="w-5 h-5" color="white" />
       </button>
       <h2 className="ml-4 text-3xl font-bold text-stone-500 dark:text-stone-300">
         {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}

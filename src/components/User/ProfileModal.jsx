@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { Button, Input, Select, DatePicker, Collapse } from "antd";
 import ava from "../../assets/cak_lontong02.jpeg";
 
-// const myUser = JSON.parse(localStorage.getItem("account"));
+const myUser = JSON.parse(localStorage.getItem("account"));
 // console.log(" myUser.module_access",  myUser.module_access)
 
 const text = `
@@ -51,23 +51,23 @@ function ProfileModal() {
     const setShowProfileModal = useStore((state) => state.setShowProfileModal);
     const userInfo = useStore((state) => state.userInfo);
 
-    const [items, setItems] = useState(null)
+    const [items, setItems] = useState(null)    
+    const [usrInfo, setUsrInfo] = useState(myUser)    
     
-    
-    const getUserInfo =() => {    
+    const getUserInfo =(ui) => {    
+        console.log("ui >>> ", ui)
        
-        if (userInfo) {
-            console.log("userInfo >>> ", userInfo)
+        if (ui) {
     
             let arrObj = []
             let obj = {}
-            for (let i = 0; i < userInfo.module_access.length; i++) {
+            for (let i = 0; i < ui.module_access.length; i++) {
                 obj = {
                     key: i,
-                    label: userInfo.module_access[i].module_app_name,
+                    label: ui.module_access[i].module_app_name,
                     children: <div className="flex flex-wrap">
                         {
-                            userInfo.module_access[i].permission.map((key, j)=> (
+                            ui.module_access[i].permission.map((key, j)=> (
                                 <div className=" m-0.5 w-fit bg-green-100 text-green-800 text-xs border-green-600 border-1 font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
                                 {key}</div>
                             ))
@@ -85,7 +85,12 @@ function ProfileModal() {
     }
     
     useEffect(()=>{
-        getUserInfo()
+        console.log("myUser >>> ", myUser)
+        if (myUser.user_id) { 
+            alert("User ID detected")
+            getUserInfo(myUser)
+            
+        } else { alert("No User ID detected") }
     }, [])
 
     const onChangeAccordion = (key) => {
@@ -129,27 +134,27 @@ function ProfileModal() {
                         </div>
                         <div className="flex flex-col text-left items-center pb-10">
                             <img className="w-24 h-24 mb-3 rounded-full shadow-lg" src={ava} alt="Bonnie image"/>
-                            <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{userInfo.employee_fullname}</h5>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">{userInfo.employee_job_title_name}</span>
+                            <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{usrInfo.employee_fullname}</h5>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{usrInfo.employee_job_title_name}</span>
 
                             <div className="flex flex-wrap w-fit">
                                 <div className="m-4 col-start-1">
                                     <dl className="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                                         <div className="flex flex-col pb-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Company</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_company_code}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_company_code}</dd>
                                         </div>
                                         <div className="flex flex-col py-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Branch</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_branch_name} ({userInfo.employee_branch})</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_branch_name} ({usrInfo.employee_branch})</dd>
                                         </div>
                                         <div className="flex flex-col pt-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Department</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_department_code}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_department_code}</dd>
                                         </div>
                                         <div className="flex flex-col pt-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">User Email</dt>
-                                            <dd className="text-base font-semibold">{userInfo.user_email}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.user_email}</dd>
                                         </div>
                                     </dl>
 
@@ -158,19 +163,19 @@ function ProfileModal() {
                                     <dl className="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                                         <div className="flex flex-col pb-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Sex</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_gender}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_gender}</dd>
                                         </div>
                                         <div className="flex flex-col pt-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">NIK</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_nik}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_nik}</dd>
                                         </div>
                                         <div className="flex flex-col py-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Contract</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_job_type_code} - {userInfo.employee_job_type_name}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_job_type_code} - {usrInfo.employee_job_type_name}</dd>
                                         </div>
                                         <div className="flex flex-col pt-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Join Date</dt>
-                                            <dd className="text-base font-semibold">{userInfo.employee_join_date}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.employee_join_date}</dd>
                                         </div>
                                     </dl>
                                 </div>
@@ -178,11 +183,11 @@ function ProfileModal() {
                                     <dl className="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                                         <div className="flex flex-col pb-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">User Role</dt>
-                                            <dd className="text-base font-semibold">{userInfo.user_role_display_name} - {userInfo.user_role_name}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.user_role_display_name} - {usrInfo.user_role_name}</dd>
                                         </div>
                                         <div className="flex flex-col pt-3">
                                             <dt className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Last Login</dt>
-                                            <dd className="text-base font-semibold">{userInfo.user_last_login_at}</dd>
+                                            <dd className="text-base font-semibold">{usrInfo.user_last_login_at}</dd>
                                         </div>
                                     </dl>
                                 </div>
@@ -191,7 +196,7 @@ function ProfileModal() {
                             <div className="flex w-full flex-wrap text-left items-center px-9">
                                 <div className=" w-full col-span-start m-3">
                                         <div className="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Module Access</div>
-                                    <Collapse items={items} defaultActiveKey={['1']} onChange={onChangeAccordion()} />
+                                    <Collapse items={items} onChange={onChangeAccordion()} />
                                 </div>
                             </div>
 

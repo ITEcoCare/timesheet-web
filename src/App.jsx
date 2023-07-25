@@ -19,7 +19,9 @@ import Navbar from "./components/Navbar";
 import Joget from "./components/Joget";
 import Footer from "./components/Footer";
 import Employee from "./components/Employee/Employee";
+import Settings from "./components/User/Settings";
 import Tempo from "./components/Tempo";
+import Tempo2 from "./components/Tempo2";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -129,10 +131,18 @@ function App() {
           path: "/tempo",
           element: (
             <RequiredAuth isLoggedIn={false}>
-              <Tempo />
+              <Tempo2 />
             </RequiredAuth>
           ),
-          component: <Tempo />
+          component: <Tempo2 />
+        },
+        {
+          path: "/settings",
+          element: (
+            <RequiredAuth isLoggedIn={false}>
+              <Settings />
+            </RequiredAuth>
+          )
         },
       ],
     },
@@ -141,8 +151,8 @@ function App() {
   return (
     <>
       {/* <div><Toaster /></div> */}
-      <div className="w-full flex flex-col bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-300 min-h-screen font-inter">
-        <div className="w-full mb-auto flex flex-col">
+      <div className=" bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-300 min-h-screen font-inter">
+        <div className="">
           {routes}
         </div>
         <Footer />

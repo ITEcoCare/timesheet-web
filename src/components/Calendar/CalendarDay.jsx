@@ -62,7 +62,7 @@ const CalendarDay = ({ day, rowIdx }) => {
         return (
             <header className="flex flex-col ">
                 <div
-                    className={` font-bold m-1 px-2 py-1 text-left ${getCurrentDayClass()}`}
+                    className={` font-bold m-1 mb-3 px-2 py-1 text-left ${getCurrentDayClass()}`}
                 >
                     {day.format("DD-MM-YY") === dayjs().format("DD-MM-YY") ? (
                         <div className="grid grid-cols-3 ">
@@ -80,7 +80,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const DayHeader = () => {
         return (
-            <header className="flex flex-col items-center bg-blue-500 rounded-t-xl border-b-blue-500 ">
+            <header className="flex flex-col items-center bg-blue-500 rounded-t-lg border-b-blue-500 ">
                 {rowIdx === 0 && (
                     <div className=" text-white mt-1 font-bold ">
                         {day.format("ddd").toUpperCase()}
@@ -92,7 +92,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalMain = () => {
         return (
-            <div className="flex flex-col col-span-1 m-1 text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-300 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-span-1 m-1 p-2 shadow-md text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-300 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {TodayHeader()}
                 {isiTask()}
             </div>
@@ -101,7 +101,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalMainBawah = () => {
         return (
-            <div className="flex flex-col col-span-1 m-1 text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-300 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-span-1 m-1 shadow-md text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-300 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {TodayHeader()}
                 {isiTask()}
             </div>
@@ -110,7 +110,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalNxtBawah = () => {
         return (
-            <div className="flex flex-col col-span-1 m-1 text-md bg-gray-300 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-400 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-span-1 m-1 shadow-md text-md bg-gray-300 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-400 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {TodayHeader()}
                 {isiTask()}
             </div>
@@ -119,7 +119,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalMainAtas = () => {
         return (
-            <div className="flex flex-col col-span-1 m-1 text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-300 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-span-1 m-1 shadow-md text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-300 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {DayHeader()}
                 {TodayHeader()}
                 {isiTask()}
@@ -129,7 +129,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalPrvAtas = () => {
         return (
-            <div className="flex flex-col col-span-1 m-1 text-md bg-gray-300 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-400 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-span-1 m-1 shadow-md text-md bg-gray-300 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-400 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {DayHeader()}
                 {TodayHeader()}
                 {isiTask()}
@@ -139,7 +139,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalPrvAtas0 = () => {
         return (
-            <div className="flex flex-col col-start-1 m-1 text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-400 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-start-1 m-1 shadow-md text-md bg-gray-300 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-400  hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {DayHeader()}
                 {TodayHeader()}
                 {isiTask()}
@@ -149,7 +149,7 @@ const CalendarDay = ({ day, rowIdx }) => {
 
     const CalMainAtas0 = () => {
         return (
-            <div className="flex flex-col col-start-1 m-1 text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 dark:border-stone-900 border-gray-00 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
+            <div className="flex flex-col col-start-1 m-1 shadow-md text-md bg-gray-100 rounded-xl dark:bg-stone-800 border-b-4 border-2 dark:border-stone-900 border-gray-00 rounded-r-xl hover:bg-blue-100 hover:border-blue-200  dark:hover:bg-stone-600 dark:hover:border-stone-800">
                 {DayHeader()}
                 {TodayHeader()}
                 {isiTask()}

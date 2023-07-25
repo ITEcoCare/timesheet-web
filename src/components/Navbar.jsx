@@ -5,12 +5,13 @@ import ava from "../assets/cak_lontong02.jpeg";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import ProfileModal from "./User/ProfileModal";
+import CollapseNav from "./Navigation/CollapseNav";
 
 const Navbar = () => {
     // state
     const [theme, setTheme] = useState(localStorage.getItem("theme"));
-    
-    //zustand 
+
+    //zustand
     const setTema = useStore((state) => state.setTema);
     const initialState = useStore((state) => state.initialState);
     const userInfo = useStore((state) => state.userInfo);
@@ -78,9 +79,11 @@ const Navbar = () => {
     const items = [
         {
             label: (
-                <div 
+                <div
                     className="px-4 py-3 text-base font-medium text-gray-900 dark:text-white  dark:bg-stone-700"
-                    onClick={()=> { setShowProfileModal(true) }}
+                    onClick={() => {
+                        setShowProfileModal(true);
+                    }}
                 >
                     Profile
                 </div>
@@ -89,12 +92,13 @@ const Navbar = () => {
         },
         {
             label: (
-                <div 
-                className="px-4 py-3 text-base font-medium text-gray-900 dark:text-white  dark:bg-stone-700"
-                // onClick={()=> { setShowProfileModal(true) }}
-            >
-                Settings
-            </div>
+                <Link
+                    className="px-4 py-3 text-base font-medium text-gray-900 dark:text-white  dark:bg-stone-700"
+                    // onClick={()=> { setShowProfileModal(true) }}
+                    to={"/settings"}
+                >
+                    Settings
+                </Link>
             ),
             key: "1",
         },
@@ -104,7 +108,7 @@ const Navbar = () => {
         {
             label: (
                 <button
-                    className=" w-full bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
+                    className=" w-full bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-2 hover:border-2 border-b-4 hover:border-b-4 border-green-700 hover:border-green-700 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
                     onClick={() => logout(accessToken)}
                 >
                     Sign out
@@ -114,78 +118,59 @@ const Navbar = () => {
         },
     ];
 
-    const navParent = "m-2"
-    const navChild = "m-2 xl:w-1/6 md:w-2/6 sm:w-3/6 bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
-    const navChildSignin = "m-2 xl:w-1/6 md:w-2/6 sm:w-3/6 text-white font-bold py-3 px-4 border-b-4 bg-green-500 hover:bg-green-400 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105"
+    const navParent = "m-2";
+    const navChild =
+        "m-2 xl:w-1/6 md:w-2/6 sm:w-3/6 bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-4 border-2 border-b-4 border-blue-700 hover:border-blue-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105";
+    const navChildSignin =
+        "m-2 xl:w-1/6 md:w-2/6 sm:w-3/6 text-white font-bold py-3 px-4 border-b-4 bg-green-500 hover:bg-green-400 border-2 border-green-700 hover:border-green-500 rounded-xl hover:shadow-inner transition duration-200 ease-in-out  transform hover:-translate-x hover:scale-105";
 
     return (
         <div className="flex flex-col mt-2 fixed z-20 md:flex-row items-center justify-center">
+            {/* <CollapseNav /> */}
+            
             <div className="flex flex-wrap mt-4 md:flex-row items-center justify-center ">
                 <div>
-                    <Link
-                        className={navChild}
-                        to={"/"}
-                    >
+                    <Link className={navChild} to={"/"}>
                         Home
                     </Link>
                 </div>
                 {!initialState._isLoggedIn ? (
                     <div>
-                        <Link
-                            className={navChildSignin}
-                            to={"/signin"}
-                        >
+                        <Link className={navChildSignin} to={"/signin"}>
                             Sign In
                         </Link>
                     </div>
                 ) : (
                     <>
                         <div>
-                            <Link
-                                className={navChild}
-                                to={"/project"}
-                            >
+                            <Link className={navChild} to={"/project"}>
                                 Project
                             </Link>
                         </div>
                         <div>
-                            <Link
-                                className={navChild}
-                                to={"/timesheet"}
-                            >
+                            <Link className={navChild} to={"/timesheet"}>
                                 Timesheet
                             </Link>
                         </div>
                         <div>
-                            { myUser.employee_lead && <Link
-                                className={navChild}
-                                to={"/my-approval"}
-                            >
-                                My Approval
-                            </Link> 
-                            }
+                            {myUser.employee_lead && (
+                                <Link className={navChild} to={"/my-approval"}>
+                                    My Approval
+                                </Link>
+                            )}
                         </div>
                         <div>
-                            <Link
-                                className={navChild}
-                                to={"/calendar"}
-                            >
+                            <Link className={navChild} to={"/calendar"}>
                                 Calendar
                             </Link>
                         </div>
                         <div>
-                            <Link
-                                className={navChild}
-                                to={"/employee"}
-                            >
+                            <Link className={navChild} to={"/employee"}>
                                 Employee
                             </Link>
                         </div>
                         <div>
-                            <Link
-                                className={navChild}
-                                to={"/tempo"}
-                            >
+                            <Link className={navChild} to={"/tempo"}>
                                 Tempo
                             </Link>
                         </div>
@@ -201,48 +186,45 @@ const Navbar = () => {
                     {theme === "dark" ? sun : moon}
                 </button>
                 {initialState._isLoggedIn && (
-                <>
-                    <img
-                        id="avatarButton"
-                        type="button"
-                        data-dropdown-toggle="userDropdown"
-                        data-dropdown-placement="bottom-start"
-                        className="w-10 h-11 rounded-xl cursor-pointer bg-stone-100 border-b-4 border-b-green-600 dark:border-b-green-500"
-                        src={ava}
-                        alt="User dropdown"
-                    />
-                    <Dropdown
-                        className="cursor-pointer"
-                        menu={{ items }}
-                        trigger={["click"]}
-                        onClick={(e) => e.preventDefault()}
-                    >
-                        <Space>
-                            <div className="text-base font-medium text-left dark:text-white">
-                                <div>
-                                    {
-                                        myUser.employee_fullname
-                                        ? myUser.employee_fullname
-                                        : "Root"
-                                    }
+                    <>
+                        <img
+                            id="avatarButton"
+                            type="button"
+                            data-dropdown-toggle="userDropdown"
+                            data-dropdown-placement="bottom-start"
+                            className="w-10 h-11 rounded-xl cursor-pointer bg-stone-100 border-b-4 border-b-green-600 dark:border-b-green-500"
+                            src={ava}
+                            alt="User dropdown"
+                        />
+                        <Dropdown
+                            className="cursor-pointer"
+                            menu={{ items }}
+                            trigger={["click"]}
+                            onClick={(e) => e.preventDefault()}
+                        >
+                            <Space>
+                                <div className="text-base font-medium text-left dark:text-white  max-xl:hidden">
+                                    <div>
+                                        {myUser.employee_fullname
+                                            ? myUser.employee_fullname
+                                            : "Root"}
+                                    </div>
+                                    <div className="text-sm text-stone-500 dark:text-stone-200">
+                                        {`${
+                                            myUser.employee_branch
+                                                ? myUser.employee_branch
+                                                : "HO"
+                                        } | ${
+                                            myUser.employee_job_title_name
+                                                ? myUser.employee_job_title_name
+                                                : "Developer"
+                                        }`}
+                                    </div>
                                 </div>
-                                <div className="text-sm text-stone-500 dark:text-stone-200">
-                                    {`${
-                                        myUser.employee_branch
-                                        ? myUser.employee_branch
-                                        : "HO"
-                                    } | ${
-                                        myUser.employee_job_title_name 
-                                        ? myUser.employee_job_title_name
-                                        : 'Developer' }`
-                                    }
-                                </div>
-                            </div>
-                            <DownOutlined />
-                        </Space>
-                    </Dropdown>
-
-                </>
+                                <DownOutlined />
+                            </Space>
+                        </Dropdown>
+                    </>
                 )}
             </div>
         </div>

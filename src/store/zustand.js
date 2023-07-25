@@ -155,7 +155,53 @@ export const useStore = create((set) => ({
                 );
             });
     },
-    
+    userUpdate: async(token, values) => {
+
+        console.log("values useupdt >>", values)
+        try {
+
+            const rc = await axios.post(`${url2}user/update`,
+                {
+                    id: values.id,
+                    email: values.email,
+                    password: values.password
+                }, 
+                {
+                    headers: { Authorization: `bearer ${token}`},
+                }
+            )
+            toast(`Sukses update user 👍`, {
+                type: "success",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                closeButton: false,
+                position: 'bottom-center',
+                hideProgressBar: false,
+                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                style: {
+                  width: "100%",
+                  'borderRadius':'15px',
+                  'marginBottom': '40px',
+                },
+            })
+            return rc
+        } catch (error) {
+            console.log(error)
+            toast(`Unauthorized User`, {
+                type: "error",
+                theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
+                position: 'bottom-center',
+                // closeButton: false,
+                // hideProgressBar: false,
+                // className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                // style: {
+                //   width: "100%",
+                //   'borderRadius':'15px',
+                //   'marginBottom': '40px',
+                // },
+            })
+        }
+
+    },
     logout: async (token) => {
         set({flagSignOut: true})
         if (localStorage.getItem("accessToken") == null ){

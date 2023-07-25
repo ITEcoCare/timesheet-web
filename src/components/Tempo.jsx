@@ -1,4 +1,5 @@
 import UserHome from "./User/UserHome";
+import FCalendar from "./FullCalendar/FCalendar";
 
 import {
     MenuFoldOutlined,
@@ -59,7 +60,8 @@ const App = () => {
 
     return (
         <>
-            <UserHome />
+            <FCalendar></FCalendar>
+            {/* <<UserHome />
             <Layout className="m-20 p-2 rounded-2xl bg-green-400">
                 <Sider
                     trigger={null}
@@ -202,15 +204,15 @@ const App = () => {
                 <div className=" col-span-1">Hello</div>
             </div>
             <div>
-        <h1>Demo App</h1>
-                    <FullCalendar
-                    plugins={[dayGridPlugin]}
-                    initialView='dayGridMonth'
-                    weekends={false}
-                    events={events}
-                    eventContent={renderEventContent}
-                    />
-                </div>
+                <h1>Demo App</h1>
+                <FullCalendar
+                plugins={[dayGridPlugin]}
+                initialView='dayGridMonth'
+                weekends={false}
+                events={events}
+                eventContent={renderEventContent}
+                />
+            </div>> */}
         </>
     );
 };

@@ -60,7 +60,7 @@ const Timesheet = () => {
 
   return (
     <div className="flex flex-col p-10 mx-10 mt-20 mb-10 h-[88vh] justify-items-center bg-gradient-to-t from-blue-600 to-transparent dark:from-blue-800 dark:to-transparent rounded-3xl overflow-x-auto drop-shadow-2xl">
-      <span className="font-bold text-3xl flex mb-4 text-blue-500">My Approval</span>
+      <span className="text-3xl font-extrabold flex mb-4 border-b-1 py-2 border-stone-200">My Approval</span>
       {/* <Tempo /> */}
       {/* <Project columns={columns} data={data} /> */}
       <TimesheetTable columns={columns} data={data} />

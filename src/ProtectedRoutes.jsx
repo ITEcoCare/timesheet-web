@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router'
-import SignIn from './Components/SignIn'
+import SignIn from './components/SignIn'
 
 const Auth =()=> {
   const user = { loggedIn: false }

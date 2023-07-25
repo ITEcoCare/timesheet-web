@@ -253,7 +253,7 @@ function Project({ columns, data }) {
     return (
         <div className="flex flex-col p-10 mx-10 mt-20 mb-10 h-[88vh] justify-items-center bg-gradient-to-t from-green-400 to-transparent dark:from-green-900 rounded-3xl overflow-x-auto drop-shadow-2xl">
            
-            <span className="font-bold text-3xl flex mb-4 text-green-500">Your Project</span>
+            <span className="text-3xl font-extrabold flex mb-4 border-b-1 py-2 border-stone-200">Your Project</span>
 
             <div className="mb-4 grid grid-cols-3">
                 <div className="col-start-1">

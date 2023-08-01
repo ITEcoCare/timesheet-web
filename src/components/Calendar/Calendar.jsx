@@ -5,6 +5,7 @@ import CalendarHeader from "../Calendar/CalendarHeader.jsx";
 import CalendarSidebar from "../Calendar/CalendarSidebar";
 import CalendarMonth from "../Calendar/CalendarMonth";
 import CalendarEventModal from "../Calendar/CalendarEventModal";
+import BigCalendar from "./BigCalendar";
 
 // zustand
 import { useStore } from "../../store/zustand";
@@ -34,10 +35,11 @@ const Calendar = () => {
                 {showEventModal && <CalendarEventModal />}
                 <div className=" flex flex-col justify-items-center">
                     <CalendarHeader />
-                    <div className="flex flex-grow">
+                    <BigCalendar />
+                    {/* <div className="flex flex-grow">
                         <CalendarSidebar />
                         <CalendarMonth month={currenMonth} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </React.Fragment>

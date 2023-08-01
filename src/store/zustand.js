@@ -157,7 +157,7 @@ export const useStore = create((set) => ({
     },
     userUpdate: async(token, values) => {
 
-        console.log("values useupdt >>", values)
+        // console.log("values useupdt >>", values)
         try {
 
             const rc = await axios.post(`${url2}user/update`,
@@ -173,15 +173,15 @@ export const useStore = create((set) => ({
             toast(`Sukses update user 👍`, {
                 type: "success",
                 theme: localStorage.getItem('theme') == 'light' ? 'light' : 'dark',
-                closeButton: false,
                 position: 'bottom-center',
-                hideProgressBar: false,
-                className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
-                style: {
-                  width: "100%",
-                  'borderRadius':'15px',
-                  'marginBottom': '40px',
-                },
+                // className: `rounded-xl drop-shadow-2xl bg-opacity-25`,
+                // closeButton: false,
+                // hideProgressBar: false,
+                // style: {
+                //   width: "100%",
+                //   'borderRadius':'15px',
+                //   'marginBottom': '40px',
+                // },
             })
             return rc
         } catch (error) {
@@ -253,6 +253,9 @@ export const useStore = create((set) => ({
 
     currTimesheet: [],
     getTimesheet: async (token, inputs) => {
+
+        console.log("inputssss", inputs)
+
         try {
             const result = await axios.post(`${url2}timesheet/my-timesheet`, 
             {
@@ -1102,6 +1105,8 @@ export const useStore = create((set) => ({
     setUpdModal: (val) => { set({ updModal: val }) },
     showTagModal: false,
     setShowTagModal: (val) => { set({ showTagModal: val }) },
+    showModAccess: false,
+    setShowModAccess: (val) => { set({ showModAccess: val })},
 
     savedEvents: null,
     dispatchCalEvent: null,

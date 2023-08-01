@@ -88,3 +88,114 @@
 .read-the-docs {
   color: #888;
 } */
+
+
+.rbc-event {
+  color: #ffffff;
+  font-weight: 700;
+  /* background-color: #c33f3f; */
+}
+
+.rbc-selected {
+  font-size: 18px;
+  color: #ffffff;
+  background-color: #11b563 !important;
+  font-weight: 700;
+  /* border-radius: 8px; */
+
+}
+
+.rbc-month-row {
+  border: none !important;
+  /* border-width: 2px  !important; */
+  /* border-radius: 5px !important;/ */
+}
+
+.rbc-day-bg {
+  border-radius: 8px !important;
+  border: none !important;
+
+  /* padding: 10px !important; */
+  margin: 3px  !important;
+  box-shadow: 2px 2px rgb(209 213 219);
+  /* border-width: 4px  !important; */
+  /* border-right-width: 8px !important; */
+  background-color: rgb(232, 232, 232);
+  --tw-bg-opacity: 1;
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+
+  /* --tw-border-opacity: 1  !important; */
+  /* border-color: rgb(229 231 235 / var(--tw-border-opacity))  !important; */
+  
+}
+
+.rbc-today {
+  background-color: #a3ddc0 !important;
+}
+
+.rbc-off-range-bg {
+  /* background-color: rgb(185, 184, 184); */
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+  font: white !important;
+}
+
+.rbc-month-view {
+  border: none !important;
+  /* border-right-width: 4px !important; */
+  /* border-width: 2px  !important; */
+  /* border-radius: 5px !important; */
+  /* margin: 2px  !important; */
+}
+
+.rbc-date-cell {
+  padding: 2px !important;
+  padding-right: 8px !important;
+}
+
+.rbc-button-link {
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 5px;
+  margin-right: 2px;
+}
+
+.rbc-header {
+  background-color: dodgerblue !important;
+  color: white;
+  border-radius: 8px !important;
+  border: none !important;
+  margin: 3px  !important;
+  padding: 3px !important;
+
+  /* margin-bottom: 8px !important; */
+  
+}
+
+.rbc-toolbar-label {
+  font-weight: bold !important;
+  font-size: 28px !important;
+  color: rgb(120 113 108) !important;
+}
+
+.rbc-btn-group {
+   border-radius: 8px !important;
+   background-color: dodgerblue!important;
+}
+
+.rbc-btn-group button {
+  border: none !important;
+  /* background-color: #bbbbbb !important; */
+  background-color: dodgerblue !important;
+  border-radius: 8px !important;
+  /* margin: 2px  !important; */
+  color: white !important;
+  font-weight: bold;
+  
+}
+
+.rbc-btn-group button:active {
+  background-color: #11b563 !important;
+  color: white;
+}
+

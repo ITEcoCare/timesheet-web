@@ -43,7 +43,7 @@ const CalendarHeader = () => {
     <header className="px-2 py-2 flex items-center font-extrabold mb-4 border-b-1 border-stone-200">
       <img src={logo} alt="calendar" className="mr-2 w-8 h-8" />
       <div className="mr-10 text-3xl font-extrabold">Calendar</div>
-      <button
+      {/* <button
         onClick={handleReset}
         className=" bg-yellow-500 hover:bg-yellow-400 text-white text-sm font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded-xl hover:shadow-inner "
       >
@@ -63,7 +63,7 @@ const CalendarHeader = () => {
       </button>
       <h2 className="ml-4 text-3xl font-bold text-stone-500 dark:text-stone-300">
         {dayjs(new Date(dayjs().year(), monthIndex)).format("MMMM YYYY")}
-      </h2>
+      </h2> */}
 
 
       {/* <button

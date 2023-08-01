@@ -4,9 +4,19 @@ import React, { useContext, useState, useEffect } from "react";
 // zustand
 import { useStore } from "../../store/zustand";
 
+const accessToken = localStorage.getItem("accessToken");
+
+
 const CalendarDay = ({ day, rowIdx }) => {
     const setDaySelected = useStore((state) => state.setDaySelected);
+    const getTimesheet = useStore((state) => state.getTimesheet);
+    const showEventModal = useStore((state) => state.showEventModal);
     const setShowEventModal = useStore((state) => state.setShowEventModal);
+    const showProjectModal = useStore((state) => state.showProjectModal);
+    const setShowProjectModal = useStore((state) => state.setShowProjectModal);
+
+    const [dataSource, setDataSource] = useState([]);
+
 
     // const [dayEvents, setDayEvents] = useState([]);
     // useEffect(() => {
@@ -18,6 +28,26 @@ const CalendarDay = ({ day, rowIdx }) => {
     // }, [filteredEvents, day]);
 
     const isiTask = () => {
+
+        {/* "timesheet": [
+            
+                 {
+                "timesheet_id": 95,
+                "timesheet_status": 0,
+                "timesheet_duration": 3,
+                "timesheet_work_date": "2023-07-26",
+                "timesheet_description": "penggunaan calendar library reactjs",
+                "project_id": 18,
+                "project_title": "Front End Discussion.",
+                "employee_id": 3,
+                "fk_department_id": 7,
+                "employee_nik": "01/PKWTTIII/22023",
+                "employee_fullname": "Raka Danesh Wara Wiri",
+                "tag_id": 14,
+                "tag_name": "Implementasi Third Party"
+            },
+        ], */}
+        
         return (
             <div className=" h-[92px] overflow-x-auto overflow-visible">
                 <div
@@ -33,26 +63,7 @@ const CalendarDay = ({ day, rowIdx }) => {
                     >
                         tsheet
                     </div>
-                    <div
-                        className={`bg-red-300 mx-1 p-1 text-black text-xs font-bold rounded-lg mb-1 truncate`}
-                    >
-                        tsheet
-                    </div>
-                    <div
-                        className={`bg-green-300 mx-1 p-1 text-black text-xs font-bold rounded-lg mb-1 truncate`}
-                    >
-                        tsheet
-                    </div>{" "}
-                    <div
-                        className={`bg-blue-300 mx-1 p-1 text-black text-xs font-bold rounded-lg mb-1 truncate`}
-                    >
-                        tsheet
-                    </div>{" "}
-                    <div
-                        className={`bg-blue-300 mx-1 p-1 text-black text-xs font-bold rounded-lg mb-1 truncate`}
-                    >
-                        tsheet
-                    </div>
+                   
                 </div>
             </div>
         );
@@ -162,6 +173,48 @@ const CalendarDay = ({ day, rowIdx }) => {
             ? "bg-green-500 text-white rounded-xl"
             : "";
     };
+
+    const runTimesheet = async (token, inputs) => {
+        let res = await getTimesheet(token, day.format("DD-MM-YY"));
+        console.log("res ?>>>", res)
+        // if(res.success){
+        //     const data = [];
+        //     for (let j = 0; j < res.result.timesheet.length; j++) {
+        //         let temp = res.result.timesheet[j];
+        //         data.push({
+        //              key: `${j}`,
+        //              name: `${temp.project_title}`,
+        //              project_id: `${temp.project_id}`,
+        //              timesheet_id: `${temp.timesheet_id}`,
+        //              timesheet_status: `${temp.timesheet_status}`,
+        //              timesheet_work_date: `${temp.timesheet_work_date}`,
+        //              timesheet_duration: `${temp.timesheet_duration}`,
+        //              timesheet_description: `${temp.timesheet_description}`,
+        //              tag_id: `${temp.tag_id}`,
+        //              tag_name: `${temp.tag_name}`,
+        //              fk_department_id: `${temp.fk_department_id}`,
+        //              employee_id: `${temp.employee_id}`,
+        //              employee_nik: `${temp.employee_nik}`,
+        //              employee_fullname: `${temp.employee_fullname}`,
+        //         });
+        //         data.sort(function(a,b){ return b.key - a.key; });
+        //     }
+        //     setDataSource(data);
+        //  }
+        //  console.log("dataSource >>>", dataSource)
+    }
+
+
+
+    useEffect(() => {
+        runTimesheet(accessToken)
+        // runProject();
+
+    }, [
+        showEventModal, 
+        showProjectModal, 
+        
+    ]);
 
     return rowIdx == 0
         ? day.$W == 0

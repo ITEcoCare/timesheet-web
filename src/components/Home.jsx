@@ -9,6 +9,7 @@ import Tempo from "./Timesheet/tempo";
 import ProfileModal from './User/ProfileModal';
 import CreateTag from './Project&Tag/CreateTag';
 import ProjectEventModal from "./Project&Tag/TimesheetEventModalcopy";
+import ModuleAccess from './User/ModuleAccess';
 
 
 
@@ -22,6 +23,7 @@ const Home = () => {
   const setShowTagModal = useStore((state) => state.setShowTagModal);
   const showProjectModal = useStore((state) => state.showProjectModal);
   const setShowProjectModal = useStore((state) => state.setShowProjectModal);
+  const showModAccess = useStore((state) => state.showModAccess);
   
   useEffect(() => {
     if (!initialState._isLoggedIn) {
@@ -53,6 +55,7 @@ const Home = () => {
         {showProfileModal && <ProfileModal />}
         {showTagModal && <CreateTag />}
         {showProjectModal && <ProjectEventModal />}
+        {showModAccess && <ModuleAccess />}
 
 
       </div>

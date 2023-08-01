@@ -5,8 +5,10 @@ import UpdateProjectModal from "../Project&Tag/UpdateProjectModal";
 import { PlusCircleTwoTone, MinusCircleTwoTone } from "@ant-design/icons";
 import Tag from "../Project&Tag/Tag";
 import { useStore } from "../../store/zustand";
-import { Table, Form } from "antd";
+import { Table, Form, Collapse} from "antd";
 import SVGsettings from "../../assets/3d/SVG_Settings"
+import ModuleCollapse from "./ModuleCollapse";
+import ModuleAccess from "./ModuleAccess";
 
 import dayjs from "dayjs";
 import {
@@ -23,52 +25,11 @@ import {
     FaAngleRight,
 } from "react-icons/fa";
 import { Formik, useFormik } from "formik";
+import { Link } from "react-router-dom";
 
-const myUser = JSON.parse(localStorage.getItem("account"));
 
 const labelsClasses = ["green", "blue", "red", "yellow", "purple"];
 const clsinpt = "w-full fill-white dark:bg-stone-800 hover:bg-white-400 py-2 px-4 border-1 border-b-4 dark:border-stone-900 border-gray-400 rounded-r-xl shadow-inner hover:bg-gray-100 "
-
-export const ActionButton = () => {
-    return (
-        <>
-            <a x-data="{ tooltip: 'Delete' }" href="#">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="h-6 w-6"
-                    x-tooltip="tooltip"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                    />
-                </svg>
-            </a>
-            <a x-data="{ tooltip: 'Edite' }" href="#">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="h-6 w-6"
-                    x-tooltip="tooltip"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                    />
-                </svg>
-            </a>
-        </>
-    );
-};
 
 function Settings({ columns, data }) {
     //zustand
@@ -78,6 +39,8 @@ function Settings({ columns, data }) {
     const setShowProjectModal = useStore((state) => state.setShowProjectModal);
     const showTagModal = useStore((state) => state.showTagModal);
     const setShowTagModal = useStore((state) => state.setShowTagModal);
+    const showModAccess = useStore((state) => state.showModAccess);
+    const setShowModAccess = useStore((state) => state.setShowModAccess);
     const updModal = useStore((state) => state.updModal);
     const setUpdModal = useStore((state) => state.setUpdModal);
     const getTimesheet = useStore((state) => state.getTimesheet);
@@ -98,6 +61,7 @@ function Settings({ columns, data }) {
 
     const [form] = Form.useForm();
 
+    const myUser = JSON.parse(localStorage.getItem("account"));
     const accessToken = localStorage.getItem("accessToken");
 
     const [title, setTitle] = useState("");
@@ -202,7 +166,7 @@ function Settings({ columns, data }) {
                                 />
                             </label>
 
-                            <div className="flex items-start mb-6">
+                            <div className="flex items-start">
                                 <div className="flex items-center h-5">
                                     <input
                                         id="terms"
@@ -217,15 +181,33 @@ function Settings({ columns, data }) {
                                 </label>
                             </div>
                         </div>
-                        <footer className="flex justify-end p-3 mt-5">
+                        <footer className="flex justify-end mb-4">
                             <button type="submit" className="text-sm font-bold bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-xl text-white border-b-4 border-b-blue-700">
                                 Save
                             </button>
                         </footer>
                     </form>
+                    <form className="mx-auto">
+                        <div>
+                            <span className="font-bold text-xl flex text-blue-500">
+                                Module Access
+                            </span>
+                            <div className="mt-2">
+                                <ModuleCollapse />
+                            </div>
+                        </div>
+                        <footer className="flex justify-end my-4">
+                            <div className="text-sm font-bold bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-xl text-white border-b-4 border-b-blue-700"
+                                onClick={()=> { setShowModAccess(true)}}
+                            >
+                                Change Access
+                            </div>
+                        </footer>
+                    </form>
+                   
                     <form className=" mx-auto " >
                         <div className=" ">
-                            <span className="font-bold text-xl ml-2 flex text-blue-500">
+                            <span className="font-bold text-xl flex text-blue-500">
                                 Other Menu
                             </span>
                             <div className={labelClass}>

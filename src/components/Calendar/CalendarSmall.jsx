@@ -98,8 +98,6 @@ const CalendarSmall = () => {
     //   }
     // }
 
-    console.log("currentMonth[0]", currentMonth[0]);
-
     return (
         <div className="mt-4 ">
             <header className="flex justify-between ">
